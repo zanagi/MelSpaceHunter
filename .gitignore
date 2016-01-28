@@ -1,0 +1,9 @@
+# project folders
+bin/
+Content/
+obj/
+Properties/
+
+# Studio files
+*.ico
+*.csproj
