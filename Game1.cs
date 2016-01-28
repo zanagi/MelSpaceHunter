@@ -34,7 +34,9 @@ namespace MelSpaceHunter
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            graphics.PreferredBackBufferWidth = 1366;
+            graphics.PreferredBackBufferHeight = 768;
+            IsMouseVisible = true;
 
             base.Initialize();
         }
