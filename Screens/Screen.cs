@@ -13,6 +13,7 @@ namespace MelSpaceHunter.Screens
     {
         protected ScreenManager manager;
         protected ContentManager content;
+        protected bool loadComplete;
 
         public Screen(ScreenManager manager)
         {
@@ -21,6 +22,7 @@ namespace MelSpaceHunter.Screens
 
         public virtual void LoadContent(ContentManager content)
         {
+            this.loadComplete = true;
             this.content = new ContentManager(content.ServiceProvider, content.RootDirectory);
         }
 
@@ -32,5 +34,10 @@ namespace MelSpaceHunter.Screens
         public abstract void Update(GameTime gameTime);
 
         public abstract void Draw(SpriteBatch spriteBatch);
+
+        public bool LoadComplete
+        {
+            get { return loadComplete; }
+        }
     }
 }

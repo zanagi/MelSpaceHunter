@@ -14,11 +14,13 @@ namespace MelSpaceHunter.Screens
         private Stack<Screen> screens;
 
         // Other
+        private ContentManager content;
         private ViewManager viewManager;
 
-        public ScreenManager()
+        public ScreenManager(ContentManager content)
         {
-            
+            this.screens = new Stack<Screen>();
+            this.content = content;
         }
 
         private void Initialize()
@@ -26,24 +28,48 @@ namespace MelSpaceHunter.Screens
 
         }
 
-        public void LoadContent(ContentManager content)
+        public void LoadContent()
         {
 
         }
 
-        public void UnloadContent()
+        public void PushScreen(Screen screen)
         {
+            screens.Push(screen);
 
+            if (!CurrentScreen.LoadComplete)
+                CurrentScreen.LoadContent(content);
+        }
+
+        public void PopScreen()
+        {
+            if (HasScreen)
+            {
+                Screen removedScreen = screens.Pop();
+                removedScreen.UnloadContent();
+            }
         }
 
         public void Update(GameTime gameTime)
         {
-
+            if (HasScreen)
+                CurrentScreen.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (HasScreen)
+                CurrentScreen.Draw(spriteBatch);
+        }
 
+        private Screen CurrentScreen
+        {
+            get { return screens.Peek(); }
+        }
+
+        private bool HasScreen
+        {
+            get { return screens.Count > 0; }
         }
     }
 }
