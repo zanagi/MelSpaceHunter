@@ -12,13 +12,22 @@ namespace MelSpaceHunter.Screens
     abstract class Screen
     {
         protected ScreenManager manager;
+        protected ContentManager content;
 
         public Screen(ScreenManager manager)
         {
             this.manager = manager;
         }
 
-        public abstract void LoadContent(ContentManager content);
+        public virtual void LoadContent(ContentManager content)
+        {
+            this.content = new ContentManager(content.ServiceProvider, content.RootDirectory);
+        }
+
+        public virtual void UnloadContent()
+        {
+            content.Unload();
+        }
 
         public abstract void Update(GameTime gameTime);
 

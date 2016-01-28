@@ -26,6 +26,16 @@ namespace MelSpaceHunter.Screens
 
         }
 
+        public void LoadContent(ContentManager content)
+        {
+
+        }
+
+        public void UnloadContent()
+        {
+
+        }
+
         public void Update(GameTime gameTime)
         {
 
