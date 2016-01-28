@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using MelSpaceHunter.Screens;
 #endregion
 
 namespace MelSpaceHunter
@@ -16,8 +17,9 @@ namespace MelSpaceHunter
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private ScreenManager screenManager;
 
         public Game1()
             : base()
@@ -50,7 +52,7 @@ namespace MelSpaceHunter
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            screenManager = new ScreenManager(Content);
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace MelSpaceHunter
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            Content.Unload();
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace MelSpaceHunter
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            screenManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -85,7 +87,9 @@ namespace MelSpaceHunter
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            screenManager.Draw(spriteBatch);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
