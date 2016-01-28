@@ -32,11 +32,5 @@ namespace MelSpaceHunter.Screens
         public abstract void Update(GameTime gameTime);
 
         public abstract void Draw(SpriteBatch spriteBatch);
-
-        protected bool RunTests()
-        {
-            Console.WriteLine("Abstract class Screen called.");
-            return true;
-        }
     }
 }
