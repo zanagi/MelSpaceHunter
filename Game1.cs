@@ -52,7 +52,7 @@ namespace MelSpaceHunter
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            screenManager = new ScreenManager(Content);
+            screenManager = new ScreenManager(Content, new ViewManager(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
         }
 
         /// <summary>

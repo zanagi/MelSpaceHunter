@@ -17,10 +17,11 @@ namespace MelSpaceHunter.Screens
         private ContentManager content;
         private ViewManager viewManager;
 
-        public ScreenManager(ContentManager content)
+        public ScreenManager(ContentManager content, ViewManager viewManager)
         {
             this.screens = new Stack<Screen>();
             this.content = content;
+            this.viewManager = viewManager;
         }
 
         private void Initialize()
