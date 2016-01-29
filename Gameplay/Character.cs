@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MelSpaceHunter.Gameplay.Forms;
 using MelSpaceHunter.Gameplay.Elementals;
 
@@ -21,12 +22,13 @@ namespace MelSpaceHunter.Gameplay
         private EarthForm earthForm;
         private WaterForm waterForm;
         private WindForm windForm;
-        private double formPoints;
+        private double formPoints, maxFormPoints;
 
-        // Character Parameters
+        // Character Stats
         private int attack, defense, energyConsumption, speed, maxStatValue;
         private int currentHealth, maxHealth, maxHealthLimit;
 
+        private const float velocityDivider = 1.5f;
 
         public Character(Vector2 pos, int startingStatValue = 5, int maxStatValue = 30, int startingMaxHealth = 100, int maxHealthLimit = 500,
             int startingElementPoints = 0, int maxElementPoints = 100)
@@ -36,13 +38,24 @@ namespace MelSpaceHunter.Gameplay
             this.maxStatValue = maxStatValue;
             this.currentHealth = maxHealth = startingMaxHealth;
             this.maxHealthLimit = maxHealthLimit;
-            this.normalForm = new NormalForm("Forms/normal");
-            this.fireForm = new FireForm("Forms/fire");
-            this.earthForm = new EarthForm("Forms/earth");
-            this.waterForm = new WaterForm("Forms/water");
-            this.windForm = new WindForm("Forms/wind");
-            this.formPoints = 0;
+
+            this.normalForm = new NormalForm("Forms/normalForm");
+            this.fireForm = new FireForm("Forms/fireForm");
+            this.earthForm = new EarthForm("Forms/earthForm");
+            this.waterForm = new WaterForm("Forms/waterForm");
+            this.windForm = new WindForm("Forms/windForm");
+            this.formPoints = 0.0;
+            this.maxFormPoints = 100.0;
             this.form = normalForm;
+        }
+
+        public void LoadContent(ContentManager content)
+        {
+            normalForm.LoadContent(content);
+            fireForm.LoadContent(content);
+            earthForm.LoadContent(content);
+            waterForm.LoadContent(content);
+            windForm.LoadContent(content);
         }
 
         public void Update(GameTime gameTime, InputManager inputManager, List<Elemental> elementals)
@@ -55,39 +68,81 @@ namespace MelSpaceHunter.Gameplay
 
         private void UpdateStats()
         {
-            if (attack < maxStatValue)
-                attack += fireForm.GetStatIncrease();
-            if (defense < maxStatValue)
-                defense += earthForm.GetStatIncrease();
-            if (energyConsumption < maxStatValue)
-                energyConsumption += waterForm.GetStatIncrease();
-            if (speed < maxStatValue)
-                speed += windForm.GetStatIncrease();
+            IncreaseStat(form.Element, form.GetStatIncrease());
         }
 
         private void HandleInput(InputManager inputManager)
         {
+            // Movement
+            if (inputManager.KeyPressed(Keys.Up))
+            {
+                pos.Y -= Velocity;
+            }
+            if (inputManager.KeyPressed(Keys.Down))
+            {
+                pos.Y += Velocity;
+            }
+            if (inputManager.KeyPressed(Keys.Left))
+            {
+                pos.X -= Velocity;
+            }
+            if (inputManager.KeyPressed(Keys.Right))
+            {
+                pos.X += Velocity;
+            }
 
+            // Transformation
+            if (!Transformed)
+            {
+                if (inputManager.KeyTapped(Keys.W) && fireForm.CanTransform())
+                {
+                    ChangeForm(fireForm);
+                }
+                else if (inputManager.KeyTapped(Keys.D) && waterForm.CanTransform())
+                {
+                    ChangeForm(waterForm);
+                }
+                else if (inputManager.KeyTapped(Keys.S) && earthForm.CanTransform())
+                {
+                    ChangeForm(earthForm);
+                }
+                else if (inputManager.KeyTapped(Keys.A) && windForm.CanTransform())
+                {
+                    ChangeForm(windForm);
+                }
+            }
+            else
+            {
+                // TODO: Transformation Special Moves
+                if (inputManager.KeyTapped(Keys.Q))
+                {
+
+                }
+                else if (inputManager.KeyTapped(Keys.E))
+                {
+
+                }
+            }
+        }
+
+        private void ChangeForm(Form newForm)
+        {
+            form = newForm;
+            formPoints = maxFormPoints;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
+            form.Draw(spriteBatch, pos);
         }
 
-        public bool CanTransform(Elements element)
+        /// <summary>
+        /// Draws the character icon, stats and elemental form icons on the bottom
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        private void DrawIcon(SpriteBatch spriteBatch)
         {
-            switch (element) {
-                case Elements.Fire:
-                    return fireForm.CanTransform();
-                case Elements.Earth:
-                    return earthForm.CanTransform();
-                case Elements.Water:
-                    return waterForm.CanTransform();
-                case Elements.Wind:
-                    return windForm.CanTransform();
-            }
-            return false;
+
         }
 
         public void IncreaseStat(Elements element, int amount)
@@ -117,6 +172,7 @@ namespace MelSpaceHunter.Gameplay
             }
         }
 
+        #region properties
         public int TotalAttack
         {
             get { return (int)(attack * form.AttackModifier); }
@@ -136,5 +192,21 @@ namespace MelSpaceHunter.Gameplay
         {
             get { return (int)(speed * form.SpeedModifier); }
         }
+
+        public bool Transformed
+        {
+            get { return !form.Equals(normalForm); }
+        }
+
+        public Vector2 Position
+        {
+            get { return pos; }
+        }
+
+        public float Velocity
+        {
+            get { return 20.0f / TotalSpeed + TotalSpeed / 3.0f; }
+        }
+        #endregion
     }
 }
