@@ -18,14 +18,14 @@ namespace MelSpaceHunter
             this.height = height;
         }
 
-        public float RelativeX(float x)
+        public int RelativeX(float x)
         {
-            return this.width * x / 100.0f;
+            return (int)(this.width * x / 100.0f);
         }
 
-        public float RelativeY(float y)
+        public int RelativeY(float y)
         {
-            return this.height * y / 100.0f;
+            return (int)(this.height * y / 100.0f);
         }
 
         public int Width

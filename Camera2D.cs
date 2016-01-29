@@ -46,7 +46,11 @@ namespace MelSpaceHunter
         }
 
 
-        //Makes sure the camera won't go over the bounds, if defined
+        /// <summary>
+        /// Sets the camera center values
+        /// </summary>
+        /// <param name="newX"></param>
+        /// <param name="newY"></param>
         public void MoveTo(int newX, int newY)
         {
             x = newX;

@@ -30,7 +30,7 @@ namespace MelSpaceHunter.Gameplay
 
         private const float velocityDivider = 1.5f;
 
-        public Character(Vector2 pos, int startingStatValue = 5, int maxStatValue = 30, int startingMaxHealth = 100, int maxHealthLimit = 500,
+        public Character(Vector2 pos, int width, int height, int startingStatValue = 5, int maxStatValue = 30, int startingMaxHealth = 100, int maxHealthLimit = 500,
             int startingElementPoints = 0, int maxElementPoints = 100)
         {
             this.pos = pos;
@@ -39,11 +39,11 @@ namespace MelSpaceHunter.Gameplay
             this.currentHealth = maxHealth = startingMaxHealth;
             this.maxHealthLimit = maxHealthLimit;
 
-            this.normalForm = new NormalForm("Forms/normalForm");
-            this.fireForm = new FireForm("Forms/fireForm");
-            this.earthForm = new EarthForm("Forms/earthForm");
-            this.waterForm = new WaterForm("Forms/waterForm");
-            this.windForm = new WindForm("Forms/windForm");
+            this.normalForm = new NormalForm("Forms/normalForm", width, height);
+            this.fireForm = new FireForm("Forms/fireForm", width, height);
+            this.earthForm = new EarthForm("Forms/earthForm", width, height);
+            this.waterForm = new WaterForm("Forms/waterForm", width, height);
+            this.windForm = new WindForm("Forms/windForm", width, height);
             this.formPoints = 0.0;
             this.maxFormPoints = 100.0;
             this.form = normalForm;
@@ -191,6 +191,11 @@ namespace MelSpaceHunter.Gameplay
         public int TotalSpeed
         {
             get { return (int)(speed * form.SpeedModifier); }
+        }
+
+        public int StatAverage
+        {
+            get { return (attack + defense + energyConsumption + speed) / 4;}
         }
 
         public bool Transformed
