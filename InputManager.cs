@@ -17,12 +17,7 @@ namespace MelSpaceHunter
         private KeyboardState keyboardState, prevKeyboardState;
         private Vector2 mousePos;
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="gameTime"></param>
-        public void Update(GameTime gameTime)
+        public void Update()
         {
             prevKeyboardState = keyboardState;
             prevMouseState = mouseState;
