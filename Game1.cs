@@ -38,7 +38,7 @@ namespace MelSpaceHunter
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = 1366;
             graphics.PreferredBackBufferHeight = 768;
-            graphics.IsFullScreen = true;
+            // graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
             base.Initialize();
