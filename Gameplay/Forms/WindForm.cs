@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using MelSpaceHunter.Gameplay.Elementals;
 
 namespace MelSpaceHunter.Gameplay.Forms
 {
@@ -9,6 +12,11 @@ namespace MelSpaceHunter.Gameplay.Forms
     {
         public WindForm(string path, int width, int height)
             : base(path, Elements.Wind, width, height)
+        {
+
+        }
+
+        public override void Update(GameTime gameTime, List<Elemental> elementals)
         {
 
         }
