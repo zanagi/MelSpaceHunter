@@ -22,7 +22,7 @@ namespace MelSpaceHunter
         /// 
         /// </summary>
         /// <param name="gameTime"></param>
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             prevKeyboardState = keyboardState;
             prevMouseState = mouseState;
