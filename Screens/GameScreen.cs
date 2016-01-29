@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MelSpaceHunter.Gameplay;
+using MelSpaceHunter.Gameplay.Elementals;
 
 namespace MelSpaceHunter.Screens
 {
@@ -16,8 +17,8 @@ namespace MelSpaceHunter.Screens
         private BackgroundManager backgroundManager;
         private Camera2D camera;
 
-        // Test
-        private Vector2 test;
+        private Character character;
+        private ElementalManager elementalManager;
 
         public GameScreen(ScreenManager manager)
             : base(manager)
@@ -26,7 +27,8 @@ namespace MelSpaceHunter.Screens
             this.backgroundManager = new BackgroundManager("background", manager.ViewManager.Width, manager.ViewManager.Height);
             this.camera = new Camera2D(manager.ViewManager.Width, manager.ViewManager.Height);
 
-            test = new Vector2(camera.X, camera.Y);
+            this.character = new Character(new Vector2(camera.X, camera.Y));
+            this.elementalManager = new ElementalManager();
         }
 
         public override void LoadContent(ContentManager contentRef)
@@ -34,35 +36,20 @@ namespace MelSpaceHunter.Screens
             base.LoadContent(contentRef);
 
             backgroundManager.LoadContent(content);
+            character.LoadContent(content);
         }
 
         public override void Update(GameTime gameTime)
         {
             inputManager.Update();
 
-            // TEST:
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                test.Y -= 3;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                test.Y += 3;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                test.X += 3;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                test.X -= 3;
-            }
-            camera.MoveTo((int)test.X, (int)test.Y);
+            character.Update(gameTime, inputManager, elementalManager.GetVisibleElementals());
+            camera.MoveTo((int)character.Position.X, (int)character.Position.Y);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
+            spriteBatch.Begin(SpriteSortMode.Deferred,
                         BlendState.AlphaBlend,
                         null,
                         null,
@@ -71,6 +58,7 @@ namespace MelSpaceHunter.Screens
                         camera.TransformMatrix);
 
             backgroundManager.Draw(spriteBatch, camera.X, camera.Y);
+            character.Draw(spriteBatch);
 
             spriteBatch.End();
         }
