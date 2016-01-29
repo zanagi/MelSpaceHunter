@@ -20,6 +20,9 @@ namespace MelSpaceHunter.Screens
         private Character character;
         private ElementalManager elementalManager;
 
+        // TODO: Help screem
+        private bool inHelpScreen;
+
         public GameScreen(ScreenManager manager)
             : base(manager)
         {
@@ -29,6 +32,9 @@ namespace MelSpaceHunter.Screens
 
             this.character = new Character(new Vector2(camera.X, camera.Y));
             this.elementalManager = new ElementalManager();
+
+            // TODO: Help screen
+            this.inHelpScreen = false;
         }
 
         public override void LoadContent(ContentManager contentRef)
@@ -41,6 +47,9 @@ namespace MelSpaceHunter.Screens
 
         public override void Update(GameTime gameTime)
         {
+            if (inHelpScreen)
+                return;
+
             inputManager.Update();
 
             character.Update(gameTime, inputManager, elementalManager.GetVisibleElementals());
@@ -59,6 +68,8 @@ namespace MelSpaceHunter.Screens
 
             backgroundManager.Draw(spriteBatch, camera.X, camera.Y);
             character.Draw(spriteBatch);
+
+            // TODO: Draw helpscreen
 
             spriteBatch.End();
         }
