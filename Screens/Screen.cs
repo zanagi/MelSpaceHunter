@@ -18,12 +18,13 @@ namespace MelSpaceHunter.Screens
         public Screen(ScreenManager manager)
         {
             this.manager = manager;
+            this.loadComplete = false;
         }
 
-        public virtual void LoadContent(ContentManager content)
+        public virtual void LoadContent(ContentManager contentRef)
         {
             this.loadComplete = true;
-            this.content = new ContentManager(content.ServiceProvider, content.RootDirectory);
+            this.content = new ContentManager(contentRef.ServiceProvider, contentRef.RootDirectory);
         }
 
         public virtual void UnloadContent()

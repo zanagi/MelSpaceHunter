@@ -22,11 +22,14 @@ namespace MelSpaceHunter.Screens
             this.screens = new Stack<Screen>();
             this.content = content;
             this.viewManager = viewManager;
+
+            Initialize();
         }
 
         private void Initialize()
         {
-
+            // TODO: change to menu -> game
+            PushScreen(new GameScreen(this));
         }
 
         public void LoadContent()
@@ -63,6 +66,13 @@ namespace MelSpaceHunter.Screens
                 CurrentScreen.Draw(spriteBatch);
         }
 
+        #region properties
+
+        public ViewManager ViewManager
+        {
+            get { return viewManager; }
+        }
+
         private Screen CurrentScreen
         {
             get { return screens.Peek(); }
@@ -72,5 +82,6 @@ namespace MelSpaceHunter.Screens
         {
             get { return screens.Count > 0; }
         }
+        #endregion
     }
 }

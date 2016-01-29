@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
-using Microsoft.Xna.Framework.GamerServices;
 using MelSpaceHunter.Screens;
 #endregion
 
@@ -36,9 +35,11 @@ namespace MelSpaceHunter
         /// </summary>
         protected override void Initialize()
         {
+            IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = 1366;
             graphics.PreferredBackBufferHeight = 768;
-            IsMouseVisible = true;
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
 
             base.Initialize();
         }
@@ -87,9 +88,7 @@ namespace MelSpaceHunter
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
             screenManager.Draw(spriteBatch);
-            spriteBatch.End();
 
             base.Draw(gameTime);
         }

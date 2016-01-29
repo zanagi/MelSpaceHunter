@@ -10,14 +10,15 @@ namespace MelSpaceHunter
     //Camera class for scrolling around the screens
     class Camera2D
     {
-        private Vector2 center;
-        private Vector2 screen;
+        private int x, y, width, height;
         private float zoom, rotation;
 
-        public Camera2D(float width, float height)
+        public Camera2D(int width, int height)
         {
-            screen = new Vector2(width, height);
-            center = new Vector2(screen.X / 2, screen.Y / 2);
+            this.width = width;
+            this.height = height;
+            this.x = width / 2;
+            this.y = height / 2;
             zoom = 1.0f;
             rotation = 0;
         }
@@ -34,21 +35,32 @@ namespace MelSpaceHunter
             set { rotation = value; }
         }
 
+        public int X
+        {
+            get { return x; }
+        }
+
+        public int Y
+        {
+            get { return y; }
+        }
+
 
         //Makes sure the camera won't go over the bounds, if defined
-        public void Move(Vector2 delta)
+        public void MoveTo(int newX, int newY)
         {
-            center += delta;
+            x = newX;
+            y = newY;
         }
 
         public Matrix TransformMatrix
         {
             get
             {
-                return Matrix.CreateTranslation(new Vector3(-center.X, -center.Y, 0)) *
+                return Matrix.CreateTranslation(new Vector3(-X, -Y, 0)) *
                                         Matrix.CreateRotationZ(Rotation) *
                                         Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) *
-                                        Matrix.CreateTranslation(new Vector3(screen.X * 0.5f, screen.Y * 0.5f, 0));
+                                        Matrix.CreateTranslation(new Vector3(width * 0.5f, height * 0.5f, 0));
             }
         }
     }

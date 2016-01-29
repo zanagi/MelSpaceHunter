@@ -10,9 +10,9 @@ namespace MelSpaceHunter
     /// </summary>
     class ViewManager
     {
-        private float width, height;
+        private int width, height;
 
-        public ViewManager(float width, float height)
+        public ViewManager(int width, int height)
         {
             this.width = width;
             this.height = height;
@@ -26,6 +26,16 @@ namespace MelSpaceHunter
         public float RelativeY(float y)
         {
             return this.height * y / 100.0f;
+        }
+
+        public int Width
+        {
+            get { return width; }
+        }
+
+        public int Height
+        {
+            get { return height; }
         }
     }
 }
