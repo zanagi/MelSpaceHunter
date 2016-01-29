@@ -7,8 +7,8 @@ namespace MelSpaceHunter.Gameplay.Forms
 {
     class EarthForm : Form
     {
-        public EarthForm(string path)
-            : base(path, Elements.Earth)
+        public EarthForm(string path, int width, int height)
+            : base(path, Elements.Earth, width, height)
         {
 
         }

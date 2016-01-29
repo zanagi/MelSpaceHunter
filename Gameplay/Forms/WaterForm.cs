@@ -7,8 +7,8 @@ namespace MelSpaceHunter.Gameplay.Forms
 {
     class WaterForm : Form
     {
-        public WaterForm(string path)
-            : base(path, Elements.Water)
+        public WaterForm(string path, int width, int height)
+            : base(path, Elements.Water, width, height)
         {
 
         }

@@ -16,9 +16,9 @@ namespace MelSpaceHunter.Gameplay.Forms
         protected Elements element;
         protected int experience, maxExperience, elementalPoints, maxElementalPoints; 
 
-        public Form(string path, Elements element, int maxElementalPoints = 100)
+        public Form(string path, Elements element, int width, int height, int maxElementalPoints = 100)
         {
-            this.animation = new Animation(path, 4, 1);
+            this.animation = new Animation(path, 4, 1, width, height);
             this.element = element;
             this.experience = 0;
             this.maxExperience = 100;
