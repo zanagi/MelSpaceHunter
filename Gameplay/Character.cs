@@ -49,6 +49,7 @@ namespace MelSpaceHunter.Gameplay
         {
             UpdateStats();
 
+            HandleInput(inputManager);
             form.Update(gameTime, elementals);
         }
 
@@ -56,6 +57,22 @@ namespace MelSpaceHunter.Gameplay
         {
             if (attack < maxStatValue)
                 attack += fireForm.GetStatIncrease();
+            if (defense < maxStatValue)
+                defense += earthForm.GetStatIncrease();
+            if (energyConsumption < maxStatValue)
+                energyConsumption += waterForm.GetStatIncrease();
+            if (speed < maxStatValue)
+                speed += windForm.GetStatIncrease();
+        }
+
+        private void HandleInput(InputManager inputManager)
+        {
+
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+
         }
 
         public bool CanTransform(Elements element)
