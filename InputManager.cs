@@ -11,7 +11,7 @@ namespace MelSpaceHunter
     /// <summary>
     /// Handles mouse and keyboard input
     /// </summary>
-    class InputHandler
+    class InputManager
     {
         private MouseState mouseState, prevMouseState;
         private KeyboardState keyboardState, prevKeyboardState;
