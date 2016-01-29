@@ -11,10 +11,15 @@ namespace MelSpaceHunter.Gameplay.Forms
     abstract class Form
     {
         protected Animation animation;
+        protected Elements element;
+        protected int experience, maxExperience; 
 
-        public Form(string path)
+        public Form(string path, Elements element)
         {
             this.animation = new Animation(path, 4, 1);
+            this.element = element;
+            this.experience = 0;
+            this.maxExperience = 100;
         }
 
         public virtual void LoadContent(ContentManager content)
@@ -30,6 +35,11 @@ namespace MelSpaceHunter.Gameplay.Forms
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin)
         {
             animation.Draw(spriteBatch, origin);
+        }
+
+        public Elements Element
+        {
+            get { return element; }
         }
     }
 }
