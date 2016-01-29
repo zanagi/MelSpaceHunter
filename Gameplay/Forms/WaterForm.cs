@@ -12,5 +12,13 @@ namespace MelSpaceHunter.Gameplay.Forms
         {
 
         }
+
+        public override float EnergyConsumptionModifier
+        {
+            get
+            {
+                return 1.5f;
+            }
+        }
     }
 }

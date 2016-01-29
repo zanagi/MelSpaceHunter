@@ -12,5 +12,13 @@ namespace MelSpaceHunter.Gameplay.Forms
         {
 
         }
+
+        public override float DefenseModifier
+        {
+            get
+            {
+                return 1.5f;
+            }
+        }
     }
 }

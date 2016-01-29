@@ -12,6 +12,7 @@ namespace MelSpaceHunter.Screens
 {
     class GameScreen : Screen
     {
+        private InputManager inputManager;
         private BackgroundManager backgroundManager;
         private Camera2D camera;
 
@@ -21,6 +22,7 @@ namespace MelSpaceHunter.Screens
         public GameScreen(ScreenManager manager)
             : base(manager)
         {
+            this.inputManager = new InputManager();
             this.backgroundManager = new BackgroundManager("background", manager.ViewManager.Width, manager.ViewManager.Height);
             this.camera = new Camera2D(manager.ViewManager.Width, manager.ViewManager.Height);
 
@@ -36,6 +38,8 @@ namespace MelSpaceHunter.Screens
 
         public override void Update(GameTime gameTime)
         {
+            inputManager.Update();
+
             // TEST:
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
