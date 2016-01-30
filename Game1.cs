@@ -42,6 +42,9 @@ namespace MelSpaceHunter
             graphics.ApplyChanges();
 
             base.Initialize();
+
+            // Game-related initializations
+            Helper.Initialize();
         }
 
         /// <summary>

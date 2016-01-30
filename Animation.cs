@@ -28,6 +28,18 @@ namespace MelSpaceHunter
             this.currentTime = 0;
         }
 
+        public Animation Clone()
+        {
+            Texture2D temp = texture;
+
+            return new Animation(path, frameColumns, frameRows, frameWidth, frameHeight, frameTime)
+            {
+                texture = temp,
+                sourceFrameWidth = texture.Width / frameColumns,
+                sourceFrameHeight = texture.Height / frameRows
+            };
+        }
+
         public void LoadContent(ContentManager content)
         {
             texture = content.Load<Texture2D>(path);
@@ -37,7 +49,7 @@ namespace MelSpaceHunter
 
         public virtual void Update(GameTime gameTime)
         {
-            this.currentTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+            this.currentTime += gameTime.ElapsedGameTime.Milliseconds;
 
             if (currentTime > frameTime)
             {
@@ -49,10 +61,35 @@ namespace MelSpaceHunter
 
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin)
         {
-            Rectangle destinationRect = new Rectangle((int)origin.X - frameWidth / 2, (int)origin.Y - frameHeight / 2, frameWidth, frameHeight);
-            Rectangle sourceRect = new Rectangle(currentFrame % frameColumns * sourceFrameWidth, currentFrame / frameColumns * sourceFrameHeight,
+            spriteBatch.Draw(texture, GetDestinationRectangle(origin), GetSourceRectangle(), Color.White);
+        }
+
+        public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin, Color color)
+        {
+            spriteBatch.Draw(texture, GetDestinationRectangle(origin), GetSourceRectangle(), color);
+        }
+
+        private Rectangle GetDestinationRectangle(Vector2 origin)
+        {
+            return new Rectangle((int)origin.X - frameWidth / 2, (int)origin.Y - frameHeight / 2, frameWidth, frameHeight);
+        }
+
+        private Rectangle GetSourceRectangle()
+        {
+            return new Rectangle(currentFrame % frameColumns * sourceFrameWidth, currentFrame / frameColumns * sourceFrameHeight,
                 sourceFrameWidth, sourceFrameHeight);
-            spriteBatch.Draw(texture, destinationRect, sourceRect, Color.White);
+        }
+
+        public int TargetWidth
+        {
+            get { return frameWidth; }
+            set { frameWidth = value; }
+        }
+
+        public int TargetHeight
+        {
+            get { return frameHeight; }
+            set { frameHeight = value; }
         }
     }
 }

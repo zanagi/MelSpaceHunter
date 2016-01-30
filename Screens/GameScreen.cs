@@ -30,8 +30,11 @@ namespace MelSpaceHunter.Screens
             this.backgroundManager = new BackgroundManager("background", manager.ViewManager.Width, manager.ViewManager.Height);
             this.camera = new Camera2D(manager.ViewManager.Width, manager.ViewManager.Height);
 
-            this.character = new Character(new Vector2(camera.X, camera.Y), manager.ViewManager.RelativeY(10), manager.ViewManager.RelativeY(10));
-            this.elementalManager = new ElementalManager();
+            int characterBaseWh = manager.ViewManager.RelativeY(10);
+            this.character = new Character(new Vector2(camera.X, camera.Y), characterBaseWh, characterBaseWh);
+
+            int elementalBaseWH = manager.ViewManager.RelativeY(8);
+            this.elementalManager = new ElementalManager(elementalBaseWH, elementalBaseWH);
 
             // TODO: Help screen
             this.inHelpScreen = false;
@@ -59,7 +62,7 @@ namespace MelSpaceHunter.Screens
                 return;
 
             
-            character.Update(gameTime, inputManager, elementalManager.GetVisibleElementals());
+            character.Update(gameTime, inputManager, elementalManager.GetElementals());
             elementalManager.Update(gameTime, character, manager.ViewManager);
             camera.MoveTo((int)character.Position.X, (int)character.Position.Y);
         }
@@ -75,6 +78,7 @@ namespace MelSpaceHunter.Screens
                         camera.TransformMatrix);
 
             backgroundManager.Draw(spriteBatch, camera.X, camera.Y);
+            elementalManager.Draw(spriteBatch);
             character.Draw(spriteBatch);
 
             // TODO: Draw helpscreen

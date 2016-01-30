@@ -23,13 +23,15 @@ namespace MelSpaceHunter.Gameplay.Elementals
         public Elemental(Elements element, Movements movement, Vector2 pos, Vector2 velocity, Animation animation,
             int width, int height, int attack, int defense, int speed, int health)
         {
-            this.created = false;
+            this.created = true;
             this.visible = false;
             this.element = element;
             this.movement = movement;
             this.pos = pos;
             this.velocity = velocity;
             this.animation = animation;
+            this.animation.TargetWidth = width;
+            this.animation.TargetHeight = height;
             this.width = width;
             this.height = height;
             this.attack = attack;
@@ -40,20 +42,25 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
         public Elemental Clone(Movements newMovement, Vector2 newPosition, Vector2 newVelocity)
         {
-            return new Elemental(element, newMovement, newPosition, newVelocity, animation, width, height, attack, defense, speed, maxHealth);
+            return new Elemental(element, newMovement, newPosition, newVelocity, animation.Clone(), width, height, attack, defense, speed, maxHealth);
         }
 
-        public void Update(GameTime gameTime, List<Elemental> elementals)
+        public void Update(GameTime gameTime, List<Elemental> elementals, Vector2 characterPosition)
         {
             if (!created)
+            {
+                // TODO: creation animation update
                 return;
+            }
 
-            Move();
+            animation.Update(gameTime);
+
+            Move(characterPosition);
 
             // TODO: Collision detection & handling
         }
 
-        private void Move()
+        private void Move(Vector2 characterPosition)
         {
             switch (movement)
             {
@@ -64,7 +71,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
                     break;
                 case Movements.Shaking:
                     break;
-                case Movements.Random:
+                case Movements.Following:
                     break;
             }
         }
@@ -77,7 +84,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
             if(!created) {
                 // TODO: Draw birth animation
             } else {
-                animation.Draw(spriteBatch, pos);
+                animation.Draw(spriteBatch, pos, Element.GetColor(this.element));
             }
         }
 

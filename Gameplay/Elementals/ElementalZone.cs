@@ -9,20 +9,21 @@ namespace MelSpaceHunter.Gameplay.Elementals
     class ElementalZone
     {
         private Vector2 center;
-        private int radius, maxElementals, generationInterval, elapsedMillis, elementalWidth, elementalHeight;
+        private int radius, generatedElementals, maxElementals, generationInterval, elapsedMillis, baseElementalCount;
         private List<Elemental> baseElementals;
         private bool generating;
 
-        public ElementalZone(Vector2 center, int radius, int maxElementals, int generationInterval,
-            int elementalWidth, int elementalHeight, List<Elemental> baseElementals)
+
+        public ElementalZone(Vector2 center, int radius, int maxElementals, int generationInterval, List<Elemental> baseElementals)
         {
             this.center = center;
             this.radius = radius;
+            this.generatedElementals = 0;
             this.maxElementals = maxElementals;
-            this.elementalWidth = elementalWidth;
-            this.elementalHeight = elementalHeight;
+            this.generationInterval = generationInterval;
             this.baseElementals = baseElementals;
-            this.generating = false;
+            this.baseElementalCount = baseElementals.Count;
+            this.generating = true;
         }
 
         public void Update(GameTime gameTime)
@@ -40,13 +41,51 @@ namespace MelSpaceHunter.Gameplay.Elementals
         {
             generating = false;
 
-            // TODO:
-            return null;
+            generatedElementals += 1;
+
+            int counter = 0;
+            int counterMax = 10;
+
+            while (counter < counterMax)
+            {
+                var angle = Math.Sqrt(Helper.RandomNextDouble()) * Math.PI * 2;
+                var gRadius = Math.Sqrt(Helper.RandomNextDouble()) * radius;
+                Vector2 pos = new Vector2((int)(center.X + gRadius * Math.Cos(angle)), (int)(center.Y + gRadius * Math.Sin(angle)));
+
+                bool intersects = false;
+                for (int i = 0; i < elementals.Count; i++)
+                {
+                    if (Vector2.DistanceSquared(pos, elementals[i].Position) < Math.Pow(elementals[i].Width / 2, 2))
+                    {
+                        intersects = true;
+                    }
+                }
+
+                // No intersection, good place to create new elemental
+                if(!intersects) {
+                    float velX = 2 * (float)Helper.RandomNextDouble() - 1;
+                    float velY = 2 * (float)Helper.RandomNextDouble() - 1;
+                    Vector2 velocity = (velX != 0.0f || velY != 0.0f) ? new Vector2(velX, velY) : Vector2.One;
+                    velocity.Normalize();
+                    return baseElementals[Helper.RandomInt(0, baseElementalCount)].Clone(Movement.RandomMovement(), pos, velocity);
+                }
+            }
+            return elementals[0];
+        }
+
+        public bool GeneratedAll
+        {
+            get { return generatedElementals >= maxElementals; }
         }
 
         public Vector2 Position
         {
             get { return center; }
+        }
+
+        public bool GeneratingElement
+        {
+            get { return generating; }
         }
     }
 }
