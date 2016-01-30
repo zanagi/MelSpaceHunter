@@ -14,6 +14,7 @@ namespace MelSpaceHunter
         private int frameWidth, frameHeight, sourceFrameWidth, sourceFrameHeight, currentFrame, frameColumns, frameRows, frameCount;
         private double frameTime, currentTime;
         private Texture2D texture;
+        private bool loopedOnce;
 
         public Animation(string path, int frameColumns, int frameRows, int frameWidth, int frameHeight, double frameTime = 100)
         {
@@ -26,6 +27,7 @@ namespace MelSpaceHunter
             this.currentFrame = 0;
             this.frameTime = frameTime;
             this.currentTime = 0;
+            this.loopedOnce = false;
         }
 
         public Animation Clone()
@@ -56,6 +58,9 @@ namespace MelSpaceHunter
                 int frameChange = (int)(currentTime / frameTime);
                 currentFrame = (currentFrame + frameChange) % frameCount;
                 currentTime -= frameChange * frameTime;
+
+                if (currentFrame == 0)
+                    loopedOnce = true;
             }
         }
 
@@ -90,6 +95,11 @@ namespace MelSpaceHunter
         {
             get { return frameHeight; }
             set { frameHeight = value; }
+        }
+
+        public bool LoopedOnce
+        {
+            get { return loopedOnce; }
         }
     }
 }

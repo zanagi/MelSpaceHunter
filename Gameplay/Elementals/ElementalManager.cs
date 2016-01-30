@@ -16,12 +16,13 @@ namespace MelSpaceHunter.Gameplay.Elementals
         private bool newZoneNeeded;
 
         private List<Animation> animations;
+        private Animation creationAnimation;
 
         private const int relativeRemovalRadius = 250;
         private const int baseElementalHealth = 20;
         private const int baseMaxZoneElementals = 5;
 
-        public ElementalManager(int baseElementalWidth, int baseElementalHeight, int maxZoneCount = 5, int zoneInterval = 3000)
+        public ElementalManager(int baseElementalWidth, int baseElementalHeight, int maxZoneCount = 10, int zoneInterval = 3000)
         {
             this.elementals = new List<Elemental>();
             this.elementalZones = new List<ElementalZone>();
@@ -36,6 +37,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
             {
                 new Animation("Forms/fireForm", 4, 1, 60, 60) //placeholder width height
             };
+            this.creationAnimation = new Animation("Elementals/elementals_creation", 6, 1, baseElementalWidth, baseElementalHeight);
         }
 
         public List<Elemental> GetElementals()
@@ -45,6 +47,8 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
         public void LoadContent(ContentManager content)
         {
+            creationAnimation.LoadContent(content);
+
             for (int i = 0; i < animations.Count; i++)
             {
                 animations[i].LoadContent(content);
@@ -183,7 +187,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
                 baseElementals.Add(
                     new Elemental(zoneElements[Helper.RandomInt(0, zoneElements.Count)], Movement.RandomMovement(),
-                        Vector2.Zero, Vector2.One, animations[Helper.RandomInt(0, animations.Count)],
+                        Vector2.Zero, Vector2.One, animations[Helper.RandomInt(0, animations.Count)], creationAnimation,
                         wh, wh, attack, defense, speed, health)
                 );
             };
