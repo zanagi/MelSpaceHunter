@@ -45,6 +45,17 @@ namespace MelSpaceHunter
             get { return y; }
         }
 
+        public int Width
+        {
+            get { return width; }
+            set { width = value; }
+        }
+
+        public int Height
+        {
+            get { return height; }
+            set { height = value; }
+        }
 
         /// <summary>
         /// Sets the camera center values

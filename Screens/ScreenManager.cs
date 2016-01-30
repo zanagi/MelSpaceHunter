@@ -17,6 +17,7 @@ namespace MelSpaceHunter.Screens
         private ContentManager content;
         private ViewManager viewManager;
 
+
         public ScreenManager(ContentManager content, ViewManager viewManager)
         {
             this.screens = new Stack<Screen>();
@@ -64,6 +65,12 @@ namespace MelSpaceHunter.Screens
         {
             if (HasScreen)
                 CurrentScreen.Draw(spriteBatch);
+        }
+
+        public void UpdateView(int width, int height)
+        {
+            viewManager.Update(width, height);
+            CurrentScreen.UpdateCameraWH(width, height);
         }
 
         #region properties

@@ -37,5 +37,11 @@ namespace MelSpaceHunter
         {
             get { return height; }
         }
+
+        public void Update(int width, int height)
+        {
+            this.width = width;
+            this.height = height;
+        }
     }
 }

@@ -19,6 +19,9 @@ namespace MelSpaceHunter
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private ScreenManager screenManager;
+        private float targetAspectRatio;
+
+        private bool viewportUpdated;
 
         public Game1()
             : base()
@@ -40,6 +43,9 @@ namespace MelSpaceHunter
             graphics.PreferredBackBufferHeight = 768;
             // graphics.IsFullScreen = true;
             graphics.ApplyChanges();
+
+            // Resulution calc
+            targetAspectRatio = 16.0f / 9;
 
             base.Initialize();
 
@@ -78,6 +84,9 @@ namespace MelSpaceHunter
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed /* || Keyboard.GetState().IsKeyDown(Keys.Escape)*/)
                 Exit();
 
+            if (!viewportUpdated)
+                return;
+
             screenManager.Update(gameTime);
 
             base.Update(gameTime);
@@ -89,8 +98,41 @@ namespace MelSpaceHunter
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Viewport = new Viewport
+            {
+                X = 0,
+                Y = 0,
+                Width = GraphicsDevice.PresentationParameters.BackBufferWidth,
+                Height = GraphicsDevice.PresentationParameters.BackBufferHeight,
+                MinDepth = 0,
+                MaxDepth = 1
+            };
 
+            GraphicsDevice.Clear(Color.Black);
+
+            int width = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            int height = (int)(width / targetAspectRatio + .5f);
+            if (height > GraphicsDevice.PresentationParameters.BackBufferHeight)
+            {
+                height = GraphicsDevice.PresentationParameters.BackBufferHeight;
+                width = (int)(height * targetAspectRatio + .5f);
+            }
+
+            GraphicsDevice.Viewport = new Viewport
+            {
+                X = GraphicsDevice.PresentationParameters.BackBufferWidth / 2 - width / 2,
+                Y = GraphicsDevice.PresentationParameters.BackBufferHeight / 2 - height / 2,
+                Width = width,
+                Height = height,
+                MinDepth = 0,
+                MaxDepth = 1
+            };
+
+            if (!viewportUpdated)
+            {
+                screenManager.UpdateView(width, height);
+                viewportUpdated = true;
+            }
             screenManager.Draw(spriteBatch);
 
             base.Draw(gameTime);

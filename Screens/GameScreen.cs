@@ -15,10 +15,10 @@ namespace MelSpaceHunter.Screens
     {
         private InputManager inputManager;
         private BackgroundManager backgroundManager;
-        private Camera2D camera;
 
         private Character character;
         private ElementalManager elementalManager;
+        private Radar radar;
 
         // TODO: Help screem
         private bool inHelpScreen;
@@ -28,13 +28,15 @@ namespace MelSpaceHunter.Screens
         {
             this.inputManager = new InputManager();
             this.backgroundManager = new BackgroundManager("background", manager.ViewManager.Width, manager.ViewManager.Height);
-            this.camera = new Camera2D(manager.ViewManager.Width, manager.ViewManager.Height);
 
             int characterBaseWh = manager.ViewManager.RelativeY(10);
             this.character = new Character(new Vector2(camera.X, camera.Y), characterBaseWh, characterBaseWh);
 
             int elementalBaseWH = manager.ViewManager.RelativeY(8);
             this.elementalManager = new ElementalManager(elementalBaseWH, elementalBaseWH);
+
+            this.radar = new Radar("radar", manager.ViewManager.RelativeX(90), manager.ViewManager.Height - manager.ViewManager.RelativeX(10),
+                manager.ViewManager.RelativeX(5), manager.ViewManager.Width);
 
             // TODO: Help screen
             this.inHelpScreen = false;
@@ -84,6 +86,9 @@ namespace MelSpaceHunter.Screens
             // TODO: Draw helpscreen
 
             spriteBatch.End();
+
+            // todo : draw icon
+            spriteBatch.Begin();
         }
     }
 }
