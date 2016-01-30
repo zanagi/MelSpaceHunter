@@ -35,8 +35,9 @@ namespace MelSpaceHunter.Screens
             int elementalBaseWH = manager.ViewManager.RelativeY(8);
             this.elementalManager = new ElementalManager(elementalBaseWH, elementalBaseWH);
 
-            this.radar = new Radar("radar", manager.ViewManager.RelativeX(90), manager.ViewManager.Height - manager.ViewManager.RelativeX(10),
-                manager.ViewManager.RelativeX(5), manager.ViewManager.Width);
+            this.radar = new Radar("radar", "radar_dot",
+                manager.ViewManager.RelativeX(90), manager.ViewManager.Height - manager.ViewManager.RelativeX(10),
+                manager.ViewManager.RelativeX(8), manager.ViewManager.Width);
 
             // TODO: Help screen
             this.inHelpScreen = false;
@@ -48,6 +49,7 @@ namespace MelSpaceHunter.Screens
 
             backgroundManager.LoadContent(content);
             elementalManager.LoadContent(content);
+            radar.LoadContent(content);
             character.LoadContent(content);
         }
 
@@ -87,8 +89,23 @@ namespace MelSpaceHunter.Screens
 
             spriteBatch.End();
 
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            // todo: draw radar
+            DrawRadar(spriteBatch);
             // todo : draw icon
-            spriteBatch.Begin();
+                
+            spriteBatch.End();
+        }
+
+        private void DrawRadar(SpriteBatch spriteBatch)
+        {
+            radar.Draw(spriteBatch);
+
+            List<Elemental> elementals = elementalManager.GetElementals();
+            for (int i = 0; i < elementals.Count; i++)
+            {
+                radar.DrawDot(spriteBatch, elementals[i].Position - character.Position, Element.GetColor(elementals[i].CurrentElement));
+            }
         }
     }
 }

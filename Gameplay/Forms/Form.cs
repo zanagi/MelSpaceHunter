@@ -46,6 +46,7 @@ namespace MelSpaceHunter.Gameplay.Forms
             int increase = experience / maxExperience;
 
             experience -= increase * maxExperience;
+            maxExperience = maxExperience * 6 / 5;
 
             return increase;
         }

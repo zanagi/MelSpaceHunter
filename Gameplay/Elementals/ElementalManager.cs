@@ -18,11 +18,11 @@ namespace MelSpaceHunter.Gameplay.Elementals
         private List<Animation> animations;
         private Animation creationAnimation;
 
-        private const int relativeRemovalRadius = 250;
+        private const int relativeRemovalRadius = 200;
         private const int baseElementalHealth = 20;
         private const int baseMaxZoneElementals = 5;
 
-        public ElementalManager(int baseElementalWidth, int baseElementalHeight, int maxZoneCount = 10, int zoneInterval = 3000)
+        public ElementalManager(int baseElementalWidth, int baseElementalHeight, int maxZoneCount = 10, int zoneInterval = 2500)
         {
             this.elementals = new List<Elemental>();
             this.elementalZones = new List<ElementalZone>();
@@ -84,7 +84,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
         private void UpdateZones(GameTime gameTime, Character character, ViewManager viewManager)
         {
              // Using relativeX for both check for a circle image zone
-            int zoneRadius = viewManager.RelativeY(50);
+            int zoneRadius = viewManager.RelativeX(50);
 
             if (newZoneNeeded)
             {
@@ -110,6 +110,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
             for (int i = 0; i < elementalZones.Count; i++)
             {
+                // Smaller removal radius for zones
                 if (elementalZones[i].GeneratedAll || Vector2.DistanceSquared(character.Position, elementalZones[i].Position)
                     > viewManager.RelativeX(relativeRemovalRadius) * viewManager.RelativeX(relativeRemovalRadius))
                 {
@@ -118,7 +119,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
                 }
                 else
                 {
-                    elementalZones[i].Update(gameTime);
+                    elementalZones[i].Update(gameTime, character.Position);
 
                     if (elementalZones[i].GeneratingElement)
                     {
@@ -151,7 +152,8 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
                 for (int i = 0; i < elementalZones.Count; i++)
                 {
-                    if (Vector2.DistanceSquared(elementalZones[i].Position, pos) < zoneRadius * zoneRadius)
+                    // More lenient zone overlapping allowed
+                    if (Vector2.DistanceSquared(elementalZones[i].Position, pos) < zoneRadius * zoneRadius / 4)
                     {
                         zoneCreated = false;
                         break;
@@ -201,11 +203,10 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
         private Vector2 RandomZonePos(Vector2 characterPosition, ViewManager viewManager)
         {
-            return new Vector2(
-                Helper.RandomInt(characterPosition.X - viewManager.RelativeX(relativeRemovalRadius * 2 / 3),
-                characterPosition.X + viewManager.RelativeX(relativeRemovalRadius * 2 / 3)),
-                Helper.RandomInt(characterPosition.Y - viewManager.RelativeY(relativeRemovalRadius * 2 / 3),
-                characterPosition.Y + viewManager.RelativeX(relativeRemovalRadius * 2 / 3)));
+            var angle = Math.Sqrt(Helper.RandomNextDouble()) * Math.PI * 2;
+            var gRadius = Helper.RandomInt(viewManager.RelativeY(10), viewManager.RelativeX(125));
+            return new Vector2((int)(characterPosition.X + gRadius * Math.Cos(angle)),
+                (int)(characterPosition.Y + gRadius * Math.Sin(angle)));
         }
 
         public void Draw(SpriteBatch spriteBatch)

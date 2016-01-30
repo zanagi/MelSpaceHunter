@@ -85,7 +85,7 @@ namespace MelSpaceHunter.Screens
             get { return screens.Peek(); }
         }
 
-        private bool HasScreen
+        public bool HasScreen
         {
             get { return screens.Count > 0; }
         }

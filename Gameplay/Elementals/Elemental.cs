@@ -97,6 +97,11 @@ namespace MelSpaceHunter.Gameplay.Elementals
         }
 
         #region Properties
+        public Elements CurrentElement
+        {
+            get { return element; }
+        }
+
         public int Width
         {
             get { return width; }

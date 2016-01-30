@@ -13,6 +13,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
         private List<Elemental> baseElementals;
         private bool generating;
 
+        private const int velocity = 3;
 
         public ElementalZone(Vector2 center, int radius, int maxElementals, int generationInterval, List<Elemental> baseElementals)
         {
@@ -26,7 +27,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
             this.generating = true;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Vector2 characterPosition)
         {
             elapsedMillis += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
 
@@ -34,6 +35,13 @@ namespace MelSpaceHunter.Gameplay.Elementals
             {
                 elapsedMillis = 0;
                 generating = true;
+            }
+            if (generating)
+            {
+                // Move center away from player
+                Vector2 delta = center - characterPosition;
+                delta.Normalize();
+                center += delta * velocity;
             }
         }
 
