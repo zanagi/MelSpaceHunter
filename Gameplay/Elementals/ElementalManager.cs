@@ -21,6 +21,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
         private const int relativeRemovalRadius = 200;
         private const int baseElementalHealth = 20;
         private const int baseMaxZoneElementals = 5;
+        private const int maxElementalCount = 100;
 
         public ElementalManager(int baseElementalWidth, int baseElementalHeight, int maxZoneCount = 10, int zoneInterval = 2500)
         {
@@ -123,9 +124,16 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
                     if (elementalZones[i].GeneratingElement)
                     {
-                        elementals.Add(elementalZones[i].NewElemental(elementals));
+                        elementalZones[i].GeneratingElement = false;
 
-                        Console.WriteLine("Elemental created at: " + elementals[elementals.Count - 1].Position);
+                        if (elementals.Count < maxElementalCount)
+                        {
+                            Elemental optionElemental = elementalZones[i].NewElemental(elementals);
+                            
+                            if(optionElemental != null) elementals.Add(optionElemental);
+
+                            Console.WriteLine("Elemental created at: " + elementals[elementals.Count - 1].Position);
+                        }
                     }
                 }
             }
@@ -198,7 +206,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
             Console.WriteLine("Zone added");
 
             elementalZones.Add(new ElementalZone(center, zoneRadius, baseMaxZoneElementals + characterStatAverage / 6,
-                1000 - 100 * characterStatAverage / 6, baseElementals));
+                1500 - 200 * characterStatAverage / 6, baseElementals));
         }
 
         private Vector2 RandomZonePos(Vector2 characterPosition, ViewManager viewManager)

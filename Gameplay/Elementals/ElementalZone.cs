@@ -13,7 +13,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
         private List<Elemental> baseElementals;
         private bool generating;
 
-        private const int velocity = 3;
+        private const int velocity = 15;
 
         public ElementalZone(Vector2 center, int radius, int maxElementals, int generationInterval, List<Elemental> baseElementals)
         {
@@ -47,12 +47,12 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
         public Elemental NewElemental(List<Elemental> elementals)
         {
-            generating = false;
-
             generatedElementals += 1;
 
             int counter = 0;
             int counterMax = 10;
+
+            Elemental baseElemental = baseElementals[Helper.RandomInt(0, baseElementalCount)];
 
             while (counter < counterMax)
             {
@@ -63,9 +63,10 @@ namespace MelSpaceHunter.Gameplay.Elementals
                 bool intersects = false;
                 for (int i = 0; i < elementals.Count; i++)
                 {
-                    if (Vector2.DistanceSquared(pos, elementals[i].Position) < Math.Pow(elementals[i].Width / 2, 2))
+                    if (Vector2.DistanceSquared(pos, elementals[i].Position) < Math.Pow(elementals[i].Width + baseElemental.Width, 2))
                     {
                         intersects = true;
+                        break;
                     }
                 }
 
@@ -75,10 +76,10 @@ namespace MelSpaceHunter.Gameplay.Elementals
                     float velY = 2 * (float)Helper.RandomNextDouble() - 1;
                     Vector2 velocity = (velX != 0.0f || velY != 0.0f) ? new Vector2(velX, velY) : Vector2.One;
                     velocity.Normalize();
-                    return baseElementals[Helper.RandomInt(0, baseElementalCount)].Clone(Movement.RandomMovement(), pos, velocity);
+                    return baseElemental.Clone(Movement.RandomMovement(), pos, velocity);
                 }
             }
-            return elementals[0];
+            return null;
         }
 
         public bool GeneratedAll
@@ -94,6 +95,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
         public bool GeneratingElement
         {
             get { return generating; }
+            set { generating = value; }
         }
     }
 }

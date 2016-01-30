@@ -82,8 +82,8 @@ namespace MelSpaceHunter.Screens
                         camera.TransformMatrix);
 
             backgroundManager.Draw(spriteBatch, camera.X, camera.Y);
-            elementalManager.Draw(spriteBatch);
             character.Draw(spriteBatch);
+            elementalManager.Draw(spriteBatch);
 
             // TODO: Draw helpscreen
 
