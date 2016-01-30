@@ -70,31 +70,35 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
         private void Move(Vector2 characterPosition, List<Elemental> elementals)
         {
-            switch (movement)
-            {
-                // TODO:
-                case Movements.Straight:
-                    // pos += velocity * MoveSpeed;
-                    break;
-                case Movements.Circling:
-                    break;
-                case Movements.Shaking:
-                    break;
-                case Movements.Following:
-                    Vector2 a = (characterPosition - pos);
-                    a.Normalize();
-                    velocity += a * 0.5f;
-                    break;
-            }
 
-            velocity = CalculateVelocity(elementals);
+            if (movement == Movements.Circling)
+            {
+                var cos = (float)Math.Cos(Math.PI / 180);
+                var sin = (float)Math.Sin(Math.PI / 180);
+                velocity = new Vector2(cos * velocity.X - sin * velocity.Y, sin * velocity.X + cos * velocity.Y);
+            }
+            else if (movement == Movements.Shaking)
+            {
+                Vector2 a = new Vector2(Helper.RandomInt(-100, 100), Helper.RandomInt(-100, 100));
+                a.Normalize();
+                velocity += a * 0.25f;
+            }
+            else if (movement == Movements.Following)
+            {
+                Vector2 a = (characterPosition - pos);
+                a.Normalize();
+                velocity += a * 0.1f;
+            }
+            velocity.Normalize();
+
+            velocity = CalculateNewVelocity(elementals);
             if (velocity.X == 0 && velocity.Y == 0) return;
 
             velocity.Normalize();
             pos += velocity * MoveSpeed;
         }
 
-        private Vector2 CalculateVelocity(List<Elemental> elementals)
+        private Vector2 CalculateNewVelocity(List<Elemental> elementals)
         {
             Vector2 delta = velocity * MoveSpeed;
             Vector2 tempVelocity = Vector2.Zero;
@@ -148,9 +152,12 @@ namespace MelSpaceHunter.Gameplay.Elementals
             if (!visible)
                 return;
 
-            if(!created) {
+            if (!created)
+            {
                 creationAnimation.Draw(spriteBatch, pos, Color.White);
-            } else {
+            }
+            else
+            {
                 animation.Draw(spriteBatch, pos, Element.GetColor(this.element));
             }
         }
