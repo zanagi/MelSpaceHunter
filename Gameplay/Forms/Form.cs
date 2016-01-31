@@ -32,16 +32,21 @@ namespace MelSpaceHunter.Gameplay.Forms
             animation.LoadContent(content);
         }
 
-        public virtual void Update(GameTime gameTime, List<Elemental> elementals, int attack, int defense, int stamina)
+        public virtual void Update(GameTime gameTime, List<Elemental> elementals, Character character)
         {
             if (experience < targetExperience)
             {
                 experience += Math.Min(3, targetExperience - experience);
             }
 
-            elementalPoints = Math.Max(0, elementalPoints - Math.Max(0.01f, 10.0f / stamina - stamina / 30.0f));
+            elementalPoints = Math.Max(0, elementalPoints - Math.Max(0.01f, 10.0f / character.TotalStamina - character.TotalStamina / 30.0f));
 
             animation.Update(gameTime);
+        }
+
+        private void HandleCombat(List<Elemental> elementals, int attack, Character character)
+        {
+
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin)
@@ -61,7 +66,9 @@ namespace MelSpaceHunter.Gameplay.Forms
             if (increase > 0)
             {
                 experience -= increase * maxExperience;
-                maxExperience = maxExperience * 6 / 5;
+
+                // Increase max experience cap
+                maxExperience = maxExperience * 115 / 100;
             }
             return increase;
         }

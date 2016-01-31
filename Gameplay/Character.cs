@@ -63,7 +63,7 @@ namespace MelSpaceHunter.Gameplay
             UpdateStats();
 
             HandleInput(inputManager);
-            form.Update(gameTime, elementals, TotalAttack, TotalDefence, TotalStamina);
+            form.Update(gameTime, elementals, this);
         }
 
         private void UpdateStats()
