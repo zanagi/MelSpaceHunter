@@ -23,6 +23,12 @@ namespace MelSpaceHunter
             rotation = 0;
         }
 
+
+        public Camera2D Clone()
+        {
+            return new Camera2D(width, height);
+        }
+
         public float Zoom
         {
             get { return zoom; }
