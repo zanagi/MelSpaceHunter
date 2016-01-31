@@ -18,10 +18,10 @@ namespace MelSpaceHunter.Gameplay
             string fireIconPath, string earthIconPath, string waterIconPath, string windIconPath, string barTexturePath)
         {
             infoZoneRect = new Rectangle(0, viewManager.Height - viewManager.RelativeX(17.5f), viewManager.RelativeX(25), viewManager.RelativeX(17.5f));
-            characterCircleRect = new Rectangle(viewManager.RelativeX(11), viewManager.Height - viewManager.RelativeX(13.5f),
+            characterCircleRect = new Rectangle(viewManager.RelativeX(3.5f), viewManager.Height - viewManager.RelativeX(13.5f),
                 viewManager.RelativeX(10), viewManager.RelativeX(10));
             expBarRect = new Rectangle(characterCircleRect.X + characterCircleRect.Width / 2,
-                characterCircleRect.Y + characterCircleRect.Height - viewManager.RelativeX(1), viewManager.RelativeX(20), viewManager.RelativeX(1));
+                characterCircleRect.Y + characterCircleRect.Height - viewManager.RelativeX(1), viewManager.RelativeX(25), viewManager.RelativeX(1));
             hpBarRect = new Rectangle(characterCircleRect.X + (int)(0.7f * characterCircleRect.Width), expBarRect.Y - viewManager.RelativeX(2),
                 expBarRect.Width - (int)(0.20f * characterCircleRect.Width), viewManager.RelativeX(2));
 

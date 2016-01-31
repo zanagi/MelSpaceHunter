@@ -16,9 +16,9 @@ namespace MelSpaceHunter.Gameplay.Forms
 
         }
 
-        public override void Update(GameTime gameTime, List<Elemental> elementals)
+        public override void Update(GameTime gameTime, List<Elemental> elementals, int attack, int defense, int stamina)
         {
-
+            base.Update(gameTime, elementals, attack, defense, stamina);
         }
 
         public override float StaminaModifier

@@ -153,6 +153,15 @@ namespace MelSpaceHunter.Gameplay
 
         private void ChangeForm(Form newForm)
         {
+            if (newForm.Equals(normalForm))
+            {
+                form.DropElementalPoints();
+            }
+            else
+            {
+                // Restore health on elemental form change
+                currentHealth = maxHealth;
+            }
             form = newForm;
         }
 

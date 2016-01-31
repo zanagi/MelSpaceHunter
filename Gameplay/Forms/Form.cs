@@ -14,14 +14,14 @@ namespace MelSpaceHunter.Gameplay.Forms
     {
         protected Animation animation;
         protected Elements element;
-        protected int experience, maxExperience;
+        protected int experience, maxExperience, targetExperience;
         protected float elementalPoints, maxElementalPoints;
 
         public Form(string path, Elements element, int width, int height, int maxElementalPoints = 100)
         {
             this.animation = new Animation(path, 4, 1, width, height);
             this.element = element;
-            this.experience = 50;
+            this.experience = this.targetExperience = 0;
             this.maxExperience = 100;
             this.elementalPoints = 0;
             this.maxElementalPoints = maxElementalPoints;
@@ -34,6 +34,11 @@ namespace MelSpaceHunter.Gameplay.Forms
 
         public virtual void Update(GameTime gameTime, List<Elemental> elementals, int attack, int defense, int stamina)
         {
+            if (experience < targetExperience)
+            {
+                experience += Math.Min(3, targetExperience - experience);
+            }
+
             elementalPoints = Math.Max(0, elementalPoints - Math.Max(0.01f, 10.0f / stamina - stamina / 30.0f));
 
             animation.Update(gameTime);
@@ -53,18 +58,30 @@ namespace MelSpaceHunter.Gameplay.Forms
         {
             int increase = experience / maxExperience;
 
-            experience -= increase * maxExperience;
-            maxExperience = maxExperience * 6 / 5;
-
+            if (increase > 0)
+            {
+                experience -= increase * maxExperience;
+                maxExperience = maxExperience * 6 / 5;
+            }
             return increase;
         }
 
-        protected void AddElementalPoints(int amount)
+        public void DropElementalPoints()
+        {
+            elementalPoints = 0;
+        }
+
+        public void AddElementalPoints(int amount)
         {
             if (amount < 0)
                 throw new Exception("Negative increase in elemental points");
 
             elementalPoints = Math.Max(elementalPoints + amount, maxElementalPoints);
+        }
+
+        public void AddExperience(int targetExperienceAmount)
+        {
+            targetExperience += targetExperienceAmount;
         }
 
         public bool CanTransform()

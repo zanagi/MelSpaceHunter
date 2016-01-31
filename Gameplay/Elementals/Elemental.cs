@@ -178,6 +178,11 @@ namespace MelSpaceHunter.Gameplay.Elementals
             get { return height; }
         }
 
+        public int PointYield
+        {
+            get { return attack + defense + speed; }
+        }
+
         public Vector2 Position
         {
             get { return pos; }
