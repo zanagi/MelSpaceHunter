@@ -55,5 +55,10 @@ namespace MelSpaceHunter.Screens
         {
             get { return loadComplete; }
         }
+
+        public InputManager InputManager
+        {
+            get { return inputManager; }
+        }
     }
 }

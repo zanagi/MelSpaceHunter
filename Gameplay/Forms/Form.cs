@@ -12,10 +12,14 @@ namespace MelSpaceHunter.Gameplay.Forms
 {
     abstract class Form
     {
-        protected Animation animation;
+        protected Animation animation, qAnimation, eAnimation;
         protected Elements element;
         protected int experience, maxExperience, targetExperience;
         protected float elementalPoints, maxElementalPoints;
+
+        protected bool usingQ, usingE;
+        protected int qTimer, eTimer;
+        protected const int abilityTime = 5000;
 
         public Form(string path, Elements element, int width, int height, int maxElementalPoints = 100)
         {
@@ -25,6 +29,8 @@ namespace MelSpaceHunter.Gameplay.Forms
             this.maxExperience = 100;
             this.elementalPoints = 0;
             this.maxElementalPoints = maxElementalPoints;
+            this.usingQ = this.usingE = false;
+            this.qTimer = this.eTimer = 0;
         }
 
         public virtual void LoadContent(ContentManager content)
@@ -34,6 +40,15 @@ namespace MelSpaceHunter.Gameplay.Forms
 
         public virtual void Update(GameTime gameTime, List<Elemental> elementals, Character character)
         {
+            if (usingQ && qAnimation != null)
+            {
+                qAnimation.Update(gameTime);
+            }
+            else if (usingE && eAnimation != null)
+            {
+                eAnimation.Update(gameTime);
+            }
+
             if (experience < targetExperience)
             {
                 experience += Math.Min(3, targetExperience - experience);
@@ -53,9 +68,7 @@ namespace MelSpaceHunter.Gameplay.Forms
                 if (Vector2.DistanceSquared(elementals[i].Position, character.Position) 
                     <= Math.Pow((elementals[i].Width + animation.TargetWidth) / 2, 2))
                 {
-                    elementals[i].TakeDamage(
-                        (int)(Math.Max(1, (character.TotalAttack + 5) * (character.TotalAttack + 5) / (5 * elementals[i].Defense)) 
-                        * Element.GetMultiplier(character.CurrentElement, elementals[i].CurrentElement)));
+                    elementals[i].TakeDamage(DamageToElemental(character, elementals[i]));
                     character.StackDamage((int)(Math.Max(1, (elementals[i].Attack + 4) * (elementals[i].Attack + 4) / (5 * character.TotalDefense))
                         * Element.GetMultiplier(elementals[i].CurrentElement, character.CurrentElement)));
                 }
@@ -63,8 +76,22 @@ namespace MelSpaceHunter.Gameplay.Forms
             character.TakeDamage();
         }
 
+        protected int DamageToElemental(Character character, Elemental elemental)
+        {
+            return (int)(Math.Max(1, (character.TotalAttack + 5) * (character.TotalAttack + 5) / (5 * elemental.Defense))
+            * Element.GetMultiplier(character.CurrentElement, elemental.CurrentElement));
+        }
+
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin)
         {
+            if (usingQ && qAnimation != null)
+            {
+                qAnimation.Draw(spriteBatch, origin);
+            }
+            else if (usingE && eAnimation != null)
+            {
+                eAnimation.Draw(spriteBatch, origin);
+            }
             animation.Draw(spriteBatch, origin);
         }
 
@@ -113,7 +140,24 @@ namespace MelSpaceHunter.Gameplay.Forms
             return elementalPoints >= maxElementalPoints;
         }
 
+        public void UseQ()
+        {
+            usingQ = true;
+            elementalPoints = Math.Max(0, elementalPoints - 0.25f * maxElementalPoints);
+        }
+
+        public void UseE() 
+        {
+            usingE = true;
+            elementalPoints = Math.Max(0, elementalPoints - 0.5f * maxElementalPoints);
+        }
+
         #region properties
+        public bool UsingAbility
+        {
+            get { return usingQ || usingE; }
+        }
+
         public Elements CurrentElement
         {
             get { return element; }

@@ -32,12 +32,11 @@ namespace MelSpaceHunter.Gameplay
         private int damageTimeElapsed, damageStacked, damageDigitWidth, damageDigitHeight;
         private const int damageInterval = 300;
 
-        private bool animating;
-        private Animation specialAnimation;
-
         private const float velocityDivider = 1.5f;
 
-        public Character(Vector2 pos, int width, int height, int startingStatValue = 5, int maxStatValue = 30, int startingMaxHealth = 100, int maxHealthLimit = 500,
+        private int score;
+
+        public Character(Vector2 pos, int width, int height, int startingStatValue = 5, int maxStatValue = 25, int startingMaxHealth = 100, int maxHealthLimit = 500,
             int startingElementPoints = 0, int maxElementPoints = 100)
         {
             this.pos = pos;
@@ -57,6 +56,7 @@ namespace MelSpaceHunter.Gameplay
             this.damageStacked = 0;
             this.damageDigitWidth = width / 4;
             this.damageDigitHeight = this.damageDigitWidth * 3 / 2;
+            this.score = 0;
         }
 
         public void LoadContent(ContentManager content)
@@ -73,18 +73,19 @@ namespace MelSpaceHunter.Gameplay
             UpdateStats();
 
             HandleInput(inputManager);
-            form.Update(gameTime, elementals, this);
 
             if (!form.Equals(normalForm) && form.ElementalRatio <= 0)
                 ChangeForm(normalForm);
 
             if (!CanBeDamaged)
                 damageTimeElapsed += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            form.Update(gameTime, elementals, this);
         }
 
         private void UpdateStats()
         {
-            IncreaseStat(form.CurrentElement, form.GetStatIncrease());
+            IncreaseStat(form.CurrentElement, form.GetStatIncrease() * 2); // Faster stat increase
         }
 
         private void HandleInput(InputManager inputManager)
@@ -141,13 +142,13 @@ namespace MelSpaceHunter.Gameplay
         private void HandleFormInput(InputManager inputManager)
         {
             // TODO: Transformation Special Moves
-            if (inputManager.KeyTapped(Keys.Q))
+            if (inputManager.KeyTapped(Keys.Q) && CanUseQ())
             {
-
+                form.UseQ();
             }
-            else if (inputManager.KeyTapped(Keys.E))
+            else if (inputManager.KeyTapped(Keys.E) && CanUseE())
             {
-
+                form.UseE();
             }
             else if (inputManager.KeyTapped(Keys.D1) && form.Equals(fireForm))
             {
@@ -205,7 +206,13 @@ namespace MelSpaceHunter.Gameplay
 
         public void AddExperience(int amount)
         {
+            if (amount <= 0)
+                return;
+
             form.AddExperience(amount);
+
+            // Also add score
+            score += amount;
         }
 
         public void AddElementalPoints(Elements element, int amount)
@@ -265,7 +272,7 @@ namespace MelSpaceHunter.Gameplay
                     speed = Math.Min(speed + amount, maxStatValue);
                     break;
                 case Elements.None:
-                    int healthChange = Math.Min(amount, maxHealthLimit - maxHealth);
+                    int healthChange = Math.Min(amount * 5, maxHealthLimit - maxHealth);
                     currentHealth += healthChange;
                     maxHealth += healthChange;
                     break;
@@ -282,15 +289,46 @@ namespace MelSpaceHunter.Gameplay
             switch (element)
             {
                 case Elements.Fire:
-                    return (form.Equals(fireForm) || (form.Equals(normalForm) && fireForm.CanTransform()));
+                    return (form.Equals(fireForm));
                 case Elements.Earth:
-                    return (form.Equals(earthForm) || (form.Equals(normalForm) && earthForm.CanTransform()));
+                    return (form.Equals(earthForm));
                 case Elements.Water:
-                    return (form.Equals(waterForm) || (form.Equals(normalForm) && waterForm.CanTransform()));
+                    return (form.Equals(waterForm));
                 case Elements.Wind:
-                    return (form.Equals(windForm) || (form.Equals(normalForm) && windForm.CanTransform()));
+                    return (form.Equals(windForm));
             }
             return false;
+        }
+
+        public bool IsAvailable(Elements element)
+        {
+            switch (element)
+            {
+                case Elements.Fire:
+                    return ((form.Equals(normalForm) && fireForm.CanTransform()));
+                case Elements.Earth:
+                    return ((form.Equals(normalForm) && earthForm.CanTransform()));
+                case Elements.Water:
+                    return ((form.Equals(normalForm) && waterForm.CanTransform()));
+                case Elements.Wind:
+                    return ((form.Equals(normalForm) && windForm.CanTransform()));
+            }
+            return false;
+        }
+
+        public bool CanTransform()
+        {
+            return fireForm.CanTransform() || waterForm.CanTransform() || earthForm.CanTransform() || windForm.CanTransform();
+        }
+
+        public bool CanUseQ()
+        {
+            return !form.UsingAbility && StatAverage >= 10 && form.ElementalRatio >= 0.25f;
+        }
+
+        public bool CanUseE()
+        {
+            return !form.UsingAbility && StatAverage >= 15 && form.ElementalRatio >= 0.5f;
         }
 
         #region properties
@@ -306,22 +344,22 @@ namespace MelSpaceHunter.Gameplay
 
         public int TotalAttack
         {
-            get { return (int)(attack * form.AttackModifier); }
+            get { return Math.Min(maxStatValue, (int)(attack * form.AttackModifier)); }
         }
 
         public int TotalDefense
         {
-            get { return (int)(defense * form.DefenseModifier); }
+            get { return Math.Min(maxStatValue, (int)(defense * form.DefenseModifier)); }
         }
 
         public int TotalStamina
         {
-            get { return (int)(stamina * form.StaminaModifier); }
+            get { return Math.Min(maxStatValue, (int)(stamina * form.StaminaModifier)); }
         }
 
         public int TotalSpeed
         {
-            get { return (int)(speed * form.SpeedModifier); }
+            get { return Math.Min(maxStatValue, (int)(speed * form.SpeedModifier)); }
         }
 
         public int CurrentHealth
@@ -379,9 +417,9 @@ namespace MelSpaceHunter.Gameplay
             get { return 20.0f / TotalSpeed + TotalSpeed / 3.0f; }
         }
 
-        public bool Animating
+        public int Score
         {
-            get { return animating; }
+            get { return score; }
         }
         #endregion
     }

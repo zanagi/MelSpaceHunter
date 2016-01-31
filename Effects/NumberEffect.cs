@@ -24,6 +24,7 @@ namespace MelSpaceHunter.Effects
             this.pos = pos;
             this.velocity = velocity;
             this.color = color;
+            this.fade = fade;
         }
 
         public override void Update(GameTime gameTime)

@@ -22,7 +22,7 @@ namespace MelSpaceHunter.Screens
         private InfoArea infoArea;
 
         // TODO: Help screem
-        private bool inHelpScreen;
+        private bool inHelpScreen, startInfoDone, transformInfoDone;
 
         public GameScreen(ScreenManager manager)
             : base(manager)
@@ -41,7 +41,7 @@ namespace MelSpaceHunter.Screens
             this.infoArea = new InfoArea(manager.ViewManager);
 
             // TODO: Help screen
-            this.inHelpScreen = false;
+            this.inHelpScreen = this.startInfoDone = this.transformInfoDone = false;
         }
 
         public override void LoadContent(ContentManager contentRef)
@@ -59,7 +59,16 @@ namespace MelSpaceHunter.Screens
         {
             base.Update(gameTime);
 
-            if (inputManager.KeyTapped(Keys.Escape))
+            if (!startInfoDone)
+            {
+                InfoBar.ActivateInfo("start"); startInfoDone = true;
+            }
+            if (!transformInfoDone && character.CanTransform())
+            {
+                InfoBar.ActivateInfo("transform"); transformInfoDone = true;
+            }
+
+            if (inputManager.KeyTapped(Keys.H))
             {
                 inHelpScreen = !inHelpScreen;
             }
@@ -71,6 +80,12 @@ namespace MelSpaceHunter.Screens
             camera.MoveTo((int)character.Position.X, (int)character.Position.Y);
 
             EffectManager.Update(gameTime);
+
+            if (character.CurrentHealth <= 0)
+            {
+                manager.PopScreen();
+                manager.PushScreen(new EndScreen(manager, character.Score));
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -94,7 +109,6 @@ namespace MelSpaceHunter.Screens
             {
                 // TODO: 
             }
-
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -103,6 +117,8 @@ namespace MelSpaceHunter.Screens
             DrawRadar(spriteBatch);
             infoArea.Draw(spriteBatch, character);
 
+            // Infobar
+            InfoBar.Draw(spriteBatch);
             spriteBatch.End();
         }
 

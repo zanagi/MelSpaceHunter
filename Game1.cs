@@ -46,7 +46,7 @@ namespace MelSpaceHunter
             graphics.ApplyChanges();
 
             // Resulution calc
-            targetAspectRatio = 16.0f / 9;
+            targetAspectRatio = graphics.PreferredBackBufferWidth / graphics.PreferredBackBufferHeight;
 
             base.Initialize();
 
@@ -63,12 +63,21 @@ namespace MelSpaceHunter
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            screenManager = new ScreenManager(Content, new ViewManager(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
+
             // Initialize static classes
             Texture2D numberSheet = Content.Load<Texture2D>("numbers");
             NumberDrawer.Initialize(numberSheet);
+
             EffectManager.Initialize();
 
-            screenManager = new ScreenManager(Content, new ViewManager(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
+            Texture2D infoBarBackground = Content.Load<Texture2D>("InfoBar/infoBar");
+            Texture2D startText = Content.Load<Texture2D>("InfoBar/startText");
+            Texture2D transformText = Content.Load<Texture2D>("InfoBar/transformText");
+            InfoBar.Initialize(infoBarBackground, 0, screenManager.ViewManager.RelativeY(4),
+                screenManager.ViewManager.Width, screenManager.ViewManager.RelativeY(4));
+            InfoBar.AddPair("start", startText);
+            InfoBar.AddPair("transform", transformText);
         }
 
         /// <summary>
@@ -87,8 +96,10 @@ namespace MelSpaceHunter
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || !screenManager.HasScreen /* || Keyboard.GetState().IsKeyDown(Keys.Escape)*/)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || !screenManager.HasScreen)
                 Exit();
+
+            
 
             if (!viewportUpdated || !this.IsActive)
                 return;

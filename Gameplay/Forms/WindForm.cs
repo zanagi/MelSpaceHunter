@@ -16,6 +16,13 @@ namespace MelSpaceHunter.Gameplay.Forms
 
         }
 
+        public override void LoadContent(ContentManager content)
+        {
+            base.LoadContent(content);
+
+            // TODO: animation
+        }
+
         public override void Update(GameTime gameTime, List<Elemental> elementals, Character character)
         {
             base.Update(gameTime, elementals, character);

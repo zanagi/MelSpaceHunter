@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace MelSpaceHunter.Screens
 {
@@ -56,8 +57,14 @@ namespace MelSpaceHunter.Screens
 
         public void Update(GameTime gameTime)
         {
+            if (CurrentScreen.InputManager.KeyTapped(Keys.Escape))
+            {
+                PopScreen();
+                return;
+            }
             if (HasScreen)
                 CurrentScreen.Update(gameTime);
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
