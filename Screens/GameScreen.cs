@@ -37,9 +37,7 @@ namespace MelSpaceHunter.Screens
             this.radar = new Radar("radar", "radar_dot",
                 manager.ViewManager.RelativeX(90), manager.ViewManager.Height - manager.ViewManager.RelativeX(10),
                 manager.ViewManager.RelativeX(8), manager.ViewManager.Width);
-            this.infoArea = new InfoArea(manager.ViewManager, "CharacterInfo/infoZoneBackground", "CharacterInfo/baseCircle",
-                "CharacterInfo/fireIcon", "CharacterInfo/waterIcon", "CharacterInfo/earthIcon", "CharacterInfo/windIcon",
-                "CharacterInfo/emptyBar");
+            this.infoArea = new InfoArea(manager.ViewManager);
 
             // TODO: Help screen
             this.inHelpScreen = false;

@@ -10,12 +10,12 @@ namespace MelSpaceHunter.Gameplay
 {
     class InfoArea
     {
-        private Texture2D infoZoneTexture, characterCircle, fireIcon, earthIcon, waterIcon, windIcon, barTexture;
-        private Rectangle infoZoneRect, characterCircleRect, hpBarRect, expBarRect, fireIconRect, waterIconRect, earthIconRect, windIconRect;
-        private string infoZonePath, characterCirclePath, fireIconPath, earthIconPath, waterIconPath, windIconPath, barTexturePath;
+        private Texture2D infoZoneTexture, characterCircle, fireIcon, earthIcon, waterIcon, windIcon, barTexture,
+            attackIcon, staminaIcon, defenseIcon, speedIcon;
+        private Rectangle infoZoneRect, characterCircleRect, hpBarRect, expBarRect, fireIconRect, waterIconRect, earthIconRect, windIconRect,
+            attackIconRect, staminaIconRect, defenseIconRect, speedIconRect;
 
-        public InfoArea(ViewManager viewManager, string infoZonePath, string characterCirclePath,
-            string fireIconPath, string earthIconPath, string waterIconPath, string windIconPath, string barTexturePath)
+        public InfoArea(ViewManager viewManager)
         {
             infoZoneRect = new Rectangle(0, viewManager.Height - viewManager.RelativeX(17.5f), viewManager.RelativeX(25), viewManager.RelativeX(17.5f));
             characterCircleRect = new Rectangle(viewManager.RelativeX(3.5f), viewManager.Height - viewManager.RelativeX(13.5f),
@@ -36,25 +36,17 @@ namespace MelSpaceHunter.Gameplay
                 characterCircleRect.Y + characterCircleRect.Height + iconMargin, iconWidth, iconWidth);
             this.windIconRect = new Rectangle(characterCircleRect.X - iconWidth - iconMargin,
                 characterCircleRect.Y + (characterCircleRect.Height - iconWidth) / 2, iconWidth, iconWidth);
-
-            this.infoZonePath = infoZonePath;
-            this.characterCirclePath = characterCirclePath;
-            this.fireIconPath = fireIconPath;
-            this.waterIconPath = waterIconPath;
-            this.earthIconPath = earthIconPath;
-            this.windIconPath = windIconPath;
-            this.barTexturePath = barTexturePath;
         }
 
         public void LoadContent(ContentManager content)
         {
-            infoZoneTexture = content.Load<Texture2D>(infoZonePath);
-            characterCircle = content.Load<Texture2D>(characterCirclePath);
-            fireIcon = content.Load<Texture2D>(fireIconPath);
-            waterIcon = content.Load<Texture2D>(waterIconPath);
-            earthIcon = content.Load<Texture2D>(earthIconPath);
-            windIcon = content.Load<Texture2D>(windIconPath);
-            barTexture = content.Load<Texture2D>(barTexturePath);
+            infoZoneTexture = content.Load<Texture2D>("CharacterInfo/infoZoneBackground");
+            characterCircle = content.Load<Texture2D>("CharacterInfo/baseCircle");
+            fireIcon = content.Load<Texture2D>("CharacterInfo/fireIcon");
+            waterIcon = content.Load<Texture2D>("CharacterInfo/waterIcon");
+            earthIcon = content.Load<Texture2D>("CharacterInfo/earthIcon");
+            windIcon = content.Load<Texture2D>("CharacterInfo/windIcon");
+            barTexture = content.Load<Texture2D>("CharacterInfo/emptyBar");
         }
 
         public void Draw(SpriteBatch spriteBatch, Character character)
