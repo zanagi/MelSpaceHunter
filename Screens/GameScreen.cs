@@ -24,6 +24,8 @@ namespace MelSpaceHunter.Screens
         // TODO: Help screem
         private bool inHelpScreen, startInfoDone, transformInfoDone;
 
+        private Texture2D help;
+
         public GameScreen(ScreenManager manager)
             : base(manager)
         {
@@ -53,6 +55,8 @@ namespace MelSpaceHunter.Screens
             radar.LoadContent(content);
             infoArea.LoadContent(content);
             character.LoadContent(content);
+
+            help = content.Load<Texture2D>("help");
         }
 
         public override void Update(GameTime gameTime)
@@ -105,10 +109,6 @@ namespace MelSpaceHunter.Screens
             // Draw effects
             EffectManager.Draw(spriteBatch);
 
-            if (inHelpScreen)
-            {
-                // TODO: 
-            }
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
@@ -119,6 +119,13 @@ namespace MelSpaceHunter.Screens
 
             // Infobar
             InfoBar.Draw(spriteBatch);
+
+            if (inHelpScreen)
+            {
+                spriteBatch.Draw(help, new Rectangle(manager.ViewManager.RelativeX(30), 0,
+                    manager.ViewManager.RelativeX(40), manager.ViewManager.Height), Color.White);
+            }
+
             spriteBatch.End();
         }
 
