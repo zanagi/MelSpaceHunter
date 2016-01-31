@@ -17,7 +17,6 @@ namespace MelSpaceHunter.Screens
         private ContentManager content;
         private ViewManager viewManager;
 
-
         public ScreenManager(ContentManager content, ViewManager viewManager)
         {
             this.screens = new Stack<Screen>();
@@ -30,7 +29,7 @@ namespace MelSpaceHunter.Screens
         private void Initialize()
         {
             // TODO: change to menu -> game
-            PushScreen(new GameScreen(this));
+            PushScreen(new MenuScreen(this));
         }
 
         public void LoadContent()

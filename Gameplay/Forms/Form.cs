@@ -41,6 +41,11 @@ namespace MelSpaceHunter.Gameplay.Forms
             animation.Draw(spriteBatch, origin);
         }
 
+        public virtual void DrawStill(SpriteBatch spriteBatch, int originX, int originY, int width, int height, int frame = 0)
+        {
+            animation.DrawFrame(spriteBatch, originX, originY, width, height, frame);
+        }
+
         public int GetStatIncrease()
         {
             int increase = experience / maxExperience;
@@ -64,6 +69,7 @@ namespace MelSpaceHunter.Gameplay.Forms
             return elementalPoints == maxElementalPoints;
         }
 
+        #region properties
         public Elements Element
         {
             get { return element; }
@@ -89,5 +95,16 @@ namespace MelSpaceHunter.Gameplay.Forms
             get { return 1.0f; }
         }
 
+        public float ExperienceRatio
+        {
+            get { return Math.Min(1.0f, 1.0f * experience / maxExperience); }
+        }
+
+        
+        public float ElementalRatio
+        {
+            get { return Math.Min(1.0f, 1.0f * elementalPoints / maxElementalPoints); }
+        }
+        #endregion
     }
 }

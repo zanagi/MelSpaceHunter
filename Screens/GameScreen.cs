@@ -13,12 +13,12 @@ namespace MelSpaceHunter.Screens
 {
     class GameScreen : Screen
     {
-        private InputManager inputManager;
         private BackgroundManager backgroundManager;
 
         private Character character;
         private ElementalManager elementalManager;
         private Radar radar;
+        private InfoArea infoArea;
 
         // TODO: Help screem
         private bool inHelpScreen;
@@ -26,7 +26,6 @@ namespace MelSpaceHunter.Screens
         public GameScreen(ScreenManager manager)
             : base(manager)
         {
-            this.inputManager = new InputManager();
             this.backgroundManager = new BackgroundManager("background", manager.ViewManager.Width, manager.ViewManager.Height);
 
             int characterBaseWh = manager.ViewManager.RelativeY(10);
@@ -38,6 +37,9 @@ namespace MelSpaceHunter.Screens
             this.radar = new Radar("radar", "radar_dot",
                 manager.ViewManager.RelativeX(90), manager.ViewManager.Height - manager.ViewManager.RelativeX(10),
                 manager.ViewManager.RelativeX(8), manager.ViewManager.Width);
+            this.infoArea = new InfoArea(manager.ViewManager, "CharacterInfo/infoZoneBackground", "CharacterInfo/baseCircle",
+                "CharacterInfo/fireIcon", "CharacterInfo/waterIcon", "CharacterInfo/earthIcon", "CharacterInfo/windIcon",
+                "CharacterInfo/emptyBar");
 
             // TODO: Help screen
             this.inHelpScreen = false;
@@ -50,22 +52,21 @@ namespace MelSpaceHunter.Screens
             backgroundManager.LoadContent(content);
             elementalManager.LoadContent(content);
             radar.LoadContent(content);
+            infoArea.LoadContent(content);
             character.LoadContent(content);
         }
 
         public override void Update(GameTime gameTime)
         {
-            inputManager.Update();
+            base.Update(gameTime);
 
             if (inputManager.KeyTapped(Keys.Escape))
             {
                 inHelpScreen = !inHelpScreen;
             }
-
             if (inHelpScreen)
                 return;
 
-            
             character.Update(gameTime, inputManager, elementalManager.GetElementals());
             elementalManager.Update(gameTime, character, manager.ViewManager);
             camera.MoveTo((int)character.Position.X, (int)character.Position.Y);
@@ -85,15 +86,16 @@ namespace MelSpaceHunter.Screens
             character.Draw(spriteBatch);
             elementalManager.Draw(spriteBatch);
 
-            // TODO: Draw helpscreen
+            if (inHelpScreen)
+            {
+                // TODO: 
+            }
 
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-            // todo: draw radar
             DrawRadar(spriteBatch);
-            // todo : draw icon
-                
+            infoArea.Draw(spriteBatch, character);
             spriteBatch.End();
         }
 

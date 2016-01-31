@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace MelSpaceHunter.Screens
 {
     abstract class Screen
@@ -15,12 +14,14 @@ namespace MelSpaceHunter.Screens
         protected ContentManager content;
         protected bool loadComplete;
         protected Camera2D camera;
+        protected InputManager inputManager;
 
         public Screen(ScreenManager manager)
         {
             this.manager = manager;
             this.loadComplete = false;
             this.camera = new Camera2D(manager.ViewManager.Width, manager.ViewManager.Height);
+            this.inputManager = new InputManager();
         }
 
         public virtual void LoadContent(ContentManager contentRef)
@@ -34,7 +35,7 @@ namespace MelSpaceHunter.Screens
             content.Unload();
         }
 
-        public void UpdateCameraWH(int width, int height)
+        public virtual void UpdateCameraWH(int width, int height)
         {
             if (width <= 0 || height <= 0)
                 throw new Exception("Invalid parameters");
@@ -43,7 +44,10 @@ namespace MelSpaceHunter.Screens
             camera.Height = height;
         }
 
-        public abstract void Update(GameTime gameTime);
+        public virtual void Update(GameTime gameTime)
+        {
+            inputManager.Update();
+        }
 
         public abstract void Draw(SpriteBatch spriteBatch);
 

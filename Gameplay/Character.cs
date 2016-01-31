@@ -28,6 +28,9 @@ namespace MelSpaceHunter.Gameplay
         private int attack, defense, energyConsumption, speed, maxStatValue;
         private int currentHealth, maxHealth, maxHealthLimit;
 
+        private bool animating;
+        private Animation specialAnimation;
+
         private const float velocityDivider = 1.5f;
 
         public Character(Vector2 pos, int width, int height, int startingStatValue = 5, int maxStatValue = 30, int startingMaxHealth = 100, int maxHealthLimit = 500,
@@ -136,13 +139,9 @@ namespace MelSpaceHunter.Gameplay
             form.Draw(spriteBatch, pos);
         }
 
-        /// <summary>
-        /// Draws the character icon, stats and elemental form icons on the bottom
-        /// </summary>
-        /// <param name="spriteBatch"></param>
-        private void DrawIcon(SpriteBatch spriteBatch)
+        public void DrawStill(SpriteBatch spriteBatch, int originX, int originY, int width, int height)
         {
-
+            form.DrawStill(spriteBatch, originX, originY, width, height);
         }
 
         public void IncreaseStat(Elements element, int amount)
@@ -198,9 +197,39 @@ namespace MelSpaceHunter.Gameplay
             get { return (attack + defense + energyConsumption + speed) / 4;}
         }
 
+        public float FireRatio
+        {
+            get { return fireForm.ElementalRatio; }
+        }
+
+        public float WaterRatio
+        {
+            get { return waterForm.ElementalRatio; }
+        }
+
+        public float EarthRatio
+        {
+            get { return earthForm.ElementalRatio; }
+        }
+
+        public float WindRatio
+        {
+            get { return windForm.ElementalRatio; }
+        }
+
         public bool Transformed
         {
             get { return !form.Equals(normalForm); }
+        }
+
+        public float HealthRatio
+        {
+            get { return 1.0f * currentHealth / maxHealth; }
+        }
+
+        public float ExperienceRatio
+        {
+            get { return form.ExperienceRatio; }
         }
 
         public Vector2 Position
@@ -211,6 +240,11 @@ namespace MelSpaceHunter.Gameplay
         public float Velocity
         {
             get { return 20.0f / TotalSpeed + TotalSpeed / 3.0f; }
+        }
+
+        public bool Animating
+        {
+            get { return animating; }
         }
         #endregion
     }
