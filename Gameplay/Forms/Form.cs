@@ -56,7 +56,7 @@ namespace MelSpaceHunter.Gameplay.Forms
                     elementals[i].TakeDamage(
                         (int)(Math.Max(1, (character.TotalAttack + 5) * (character.TotalAttack + 5) / (5 * elementals[i].Defense)) 
                         * Element.GetMultiplier(character.CurrentElement, elementals[i].CurrentElement)));
-                    character.StackDamage((int)(Math.Max(1, (elementals[i].Attack + 4) * (elementals[i].Attack + 4) / (4 * character.TotalDefense))
+                    character.StackDamage((int)(Math.Max(1, (elementals[i].Attack + 4) * (elementals[i].Attack + 4) / (5 * character.TotalDefense))
                         * Element.GetMultiplier(elementals[i].CurrentElement, character.CurrentElement)));
                 }
             }

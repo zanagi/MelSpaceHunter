@@ -211,7 +211,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
         public int PointYield
         {
-            get { return attack + defense + speed; }
+            get { return (attack + defense + speed) * 2; }
         }
 
         public int Attack

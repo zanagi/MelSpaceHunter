@@ -11,7 +11,7 @@ namespace MelSpaceHunter.Gameplay
     class InfoArea
     {
         private Texture2D infoZoneTexture, characterCircle, fireIcon, earthIcon, waterIcon, windIcon, barTexture,
-            attackIcon, staminaIcon, defenseIcon, speedIcon;
+            attackIcon, staminaIcon, defenseIcon, speedIcon, highlightTexture;
         private Rectangle infoZoneRect, characterCircleRect, hpBarRect, expBarRect, fireIconRect, waterIconRect, earthIconRect, windIconRect,
             attackIconRect, staminaIconRect, defenseIconRect, speedIconRect;
 
@@ -78,6 +78,7 @@ namespace MelSpaceHunter.Gameplay
         public void LoadContent(ContentManager content)
         {
             infoZoneTexture = content.Load<Texture2D>("CharacterInfo/infoZoneBackground");
+            highlightTexture = content.Load<Texture2D>("CharacterInfo/highlight");
             characterCircle = content.Load<Texture2D>("CharacterInfo/baseCircle");
             fireIcon = content.Load<Texture2D>("CharacterInfo/fireIcon");
             waterIcon = content.Load<Texture2D>("CharacterInfo/waterIcon");
@@ -123,24 +124,36 @@ namespace MelSpaceHunter.Gameplay
         {
             float fireRatio = character.FireRatio; float waterRatio = character.WaterRatio;
             float earthRatio = character.EarthRatio; float windRatio = character.WindRatio;
+
+            if (character.IsActive(Elements.Fire))
+                spriteBatch.Draw(highlightTexture, fireIconRect, Color.White);
             spriteBatch.Draw(fireIcon, fireIconRect, Color.Black);
             spriteBatch.Draw(fireIcon,
                     new Rectangle(fireIconRect.X, fireIconRect.Y + (int)((1.0f - fireRatio) * fireIconRect.Height),
                     fireIconRect.Width, (int)(fireIconRect.Height * fireRatio)),
                     new Rectangle(0, (int)((1.0f - fireRatio) * fireIcon.Height), fireIcon.Width, (int)(fireRatio * fireIcon.Height)), 
                     (character.IsActive(Elements.Fire)) ? Color.White : Color.SlateGray);
+            
+            if (character.IsActive(Elements.Water))
+                spriteBatch.Draw(highlightTexture, waterIconRect, Color.White);
             spriteBatch.Draw(waterIcon, waterIconRect, Color.Black);
             spriteBatch.Draw(waterIcon,
                     new Rectangle(waterIconRect.X, waterIconRect.Y + (int)((1.0f - waterRatio) * waterIconRect.Height),
                     waterIconRect.Width, (int)(waterIconRect.Height * waterRatio)),
                     new Rectangle(0, (int)((1.0f - waterRatio) * waterIcon.Height), waterIcon.Width, (int)(waterRatio * waterIcon.Height)),
                     (character.IsActive(Elements.Water)) ? Color.White : Color.SlateGray);
+
+            if (character.IsActive(Elements.Earth))
+                spriteBatch.Draw(highlightTexture, earthIconRect, Color.White);
             spriteBatch.Draw(earthIcon, earthIconRect, Color.Black);
             spriteBatch.Draw(earthIcon,
                     new Rectangle(earthIconRect.X, earthIconRect.Y + (int)((1.0f - earthRatio) * earthIconRect.Height),
                     earthIconRect.Width, (int)(earthIconRect.Height * earthRatio)),
                     new Rectangle(0, (int)((1.0f - earthRatio) * earthIcon.Height), earthIcon.Width, (int)(earthRatio * earthIcon.Height)),
                     (character.IsActive(Elements.Earth)) ? Color.White : Color.SlateGray);
+
+            if (character.IsActive(Elements.Wind))
+                spriteBatch.Draw(highlightTexture, windIconRect, Color.White);
             spriteBatch.Draw(windIcon, windIconRect, Color.Black);
             spriteBatch.Draw(windIcon,
                     new Rectangle(windIconRect.X, windIconRect.Y + (int)((1.0f - windRatio) * windIconRect.Height),

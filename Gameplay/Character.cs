@@ -176,7 +176,7 @@ namespace MelSpaceHunter.Gameplay
             else
             {
                 // Restore health on elemental form change
-                currentHealth = maxHealth;
+                RecoverHealth(maxHealth / 4, currentHealth / 2);
             }
             form = newForm;
         }
@@ -247,6 +247,9 @@ namespace MelSpaceHunter.Gameplay
             if(amount < 0)
                 throw new Exception("Negative stat increase.");
 
+            if (element != Elements.None && amount > 0)
+                RecoverHealth(maxHealth / 10, currentHealth / 5);
+
             switch (element)
             {
                 case Elements.Fire:
@@ -267,6 +270,11 @@ namespace MelSpaceHunter.Gameplay
                     maxHealth += healthChange;
                     break;
             }
+        }
+
+        private void RecoverHealth(int a, int b)
+        {
+            currentHealth = Math.Min(maxHealth, currentHealth + Math.Max(a, b));
         }
 
         public bool IsActive(Elements element)
