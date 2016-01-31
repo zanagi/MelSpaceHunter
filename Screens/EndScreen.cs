@@ -12,6 +12,7 @@ namespace MelSpaceHunter.Screens
     {
         private Texture2D background;
         private int score, timer, timeLimit;
+        private Rectangle rect;
 
         public EndScreen(ScreenManager manager, int score)
             : base(manager)
@@ -19,6 +20,8 @@ namespace MelSpaceHunter.Screens
             this.score = score;
             this.timer = 0;
             this.timeLimit = 3000;
+            this.rect = new Rectangle(manager.ViewManager.RelativeX(60), manager.ViewManager.RelativeY(58.0f),
+                manager.ViewManager.RelativeX(10.0f / 3), manager.ViewManager.RelativeX(5));
         }
 
         public override void LoadContent(ContentManager contentRef)
@@ -28,25 +31,27 @@ namespace MelSpaceHunter.Screens
             background = content.Load<Texture2D>("endBg");
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (timer < timeLimit)
                 timer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (timer >= timeLimit)
             {
-                if (inputManager.MouseClicked())
+                if (InputManager.MouseClicked())
                 {
                     manager.PopScreen();
                 }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Begin();
             spriteBatch.Draw(background, new Rectangle(0, 0, manager.ViewManager.Width, manager.ViewManager.Height), Color.White);
-
+            NumberDrawer.DrawNumber(spriteBatch, score, rect, Color.Black);
             // TODO: Display score
+            spriteBatch.End();
         }
     }
 }

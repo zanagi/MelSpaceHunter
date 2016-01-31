@@ -44,10 +44,7 @@ namespace MelSpaceHunter.Screens
             camera.Height = height;
         }
 
-        public virtual void Update(GameTime gameTime)
-        {
-            inputManager.Update();
-        }
+        public virtual void Update(GameTime gameTime) { }
 
         public abstract void Draw(SpriteBatch spriteBatch);
 

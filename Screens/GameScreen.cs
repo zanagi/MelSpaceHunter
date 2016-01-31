@@ -68,7 +68,7 @@ namespace MelSpaceHunter.Screens
                 InfoBar.ActivateInfo("transform"); transformInfoDone = true;
             }
 
-            if (inputManager.KeyTapped(Keys.H))
+            if (InputManager.KeyTapped(Keys.H))
             {
                 inHelpScreen = !inHelpScreen;
             }

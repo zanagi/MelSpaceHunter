@@ -91,19 +91,19 @@ namespace MelSpaceHunter.Gameplay
         private void HandleInput(InputManager inputManager)
         {
             // Movement
-            if (inputManager.KeyPressed(Keys.Up) || inputManager.KeyPressed(Keys.W))
+            if (InputManager.KeyPressed(Keys.Up) || InputManager.KeyPressed(Keys.W))
             {
                 pos.Y -= Velocity;
             }
-            if (inputManager.KeyPressed(Keys.Down) || inputManager.KeyPressed(Keys.S))
+            if (InputManager.KeyPressed(Keys.Down) || InputManager.KeyPressed(Keys.S))
             {
                 pos.Y += Velocity;
             }
-            if (inputManager.KeyPressed(Keys.Left) || inputManager.KeyPressed(Keys.A))
+            if (InputManager.KeyPressed(Keys.Left) || InputManager.KeyPressed(Keys.A))
             {
                 pos.X -= Velocity;
             }
-            if (inputManager.KeyPressed(Keys.Right) || inputManager.KeyPressed(Keys.D))
+            if (InputManager.KeyPressed(Keys.Right) || InputManager.KeyPressed(Keys.D))
             {
                 pos.X += Velocity;
             }
@@ -121,19 +121,19 @@ namespace MelSpaceHunter.Gameplay
 
         private void HandleTransformationInput(InputManager inputManager)
         {
-            if (inputManager.KeyTapped(Keys.D1) && fireForm.CanTransform())
+            if (InputManager.KeyTapped(Keys.D1) && fireForm.CanTransform())
             {
                 ChangeForm(fireForm);
             }
-            else if (inputManager.KeyTapped(Keys.D2) && waterForm.CanTransform())
+            else if (InputManager.KeyTapped(Keys.D2) && waterForm.CanTransform())
             {
                 ChangeForm(waterForm);
             }
-            else if (inputManager.KeyTapped(Keys.D3) && earthForm.CanTransform())
+            else if (InputManager.KeyTapped(Keys.D3) && earthForm.CanTransform())
             {
                 ChangeForm(earthForm);
             }
-            else if (inputManager.KeyTapped(Keys.D4) && windForm.CanTransform())
+            else if (InputManager.KeyTapped(Keys.D4) && windForm.CanTransform())
             {
                 ChangeForm(windForm);
             }
@@ -142,27 +142,27 @@ namespace MelSpaceHunter.Gameplay
         private void HandleFormInput(InputManager inputManager)
         {
             // TODO: Transformation Special Moves
-            if (inputManager.KeyTapped(Keys.Q) && CanUseQ())
+            if (InputManager.KeyTapped(Keys.Q) && CanUseQ())
             {
                 form.UseQ();
             }
-            else if (inputManager.KeyTapped(Keys.E) && CanUseE())
+            else if (InputManager.KeyTapped(Keys.E) && CanUseE())
             {
                 form.UseE();
             }
-            else if (inputManager.KeyTapped(Keys.D1) && form.Equals(fireForm))
+            else if (InputManager.KeyTapped(Keys.D1) && form.Equals(fireForm))
             {
                 ChangeForm(normalForm);
             }
-            else if (inputManager.KeyTapped(Keys.D2) && form.Equals(waterForm))
+            else if (InputManager.KeyTapped(Keys.D2) && form.Equals(waterForm))
             {
                 ChangeForm(normalForm);
             }
-            else if (inputManager.KeyTapped(Keys.D3) && form.Equals(earthForm))
+            else if (InputManager.KeyTapped(Keys.D3) && form.Equals(earthForm))
             {
                 ChangeForm(normalForm);
             }
-            else if (inputManager.KeyTapped(Keys.D4) && form.Equals(windForm))
+            else if (InputManager.KeyTapped(Keys.D4) && form.Equals(windForm))
             {
                 ChangeForm(normalForm);
             }

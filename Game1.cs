@@ -46,7 +46,7 @@ namespace MelSpaceHunter
             graphics.ApplyChanges();
 
             // Resulution calc
-            targetAspectRatio = graphics.PreferredBackBufferWidth / graphics.PreferredBackBufferHeight;
+            targetAspectRatio = 16.0f / 9;
 
             base.Initialize();
 
@@ -96,10 +96,16 @@ namespace MelSpaceHunter
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            InputManager.Update(gameTime);
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || !screenManager.HasScreen)
                 Exit();
 
-            
+            if (InputManager.KeyTapped(Keys.F5))
+            {
+                graphics.IsFullScreen = !graphics.IsFullScreen;
+                graphics.ApplyChanges();
+            }
 
             if (!viewportUpdated || !this.IsActive)
                 return;

@@ -13,42 +13,45 @@ namespace MelSpaceHunter
     /// </summary>
     class InputManager
     {
-        private MouseState mouseState, prevMouseState;
-        private KeyboardState keyboardState, prevKeyboardState;
-        private Vector2 mousePos;
+        private static MouseState mouseState, prevMouseState;
+        private static KeyboardState keyboardState, prevKeyboardState;
+        private static Vector2 mousePos;
 
-        public void Update()
+        //Update keyboard and mouse states, (and mouse position)
+        public static void Update(GameTime gameTime)
         {
             prevKeyboardState = keyboardState;
             prevMouseState = mouseState;
+
             keyboardState = Keyboard.GetState();
             mouseState = Mouse.GetState();
+
             mousePos = new Vector2(mouseState.X, mouseState.Y);
         }
 
         //Access input data from static methods
 
-        public Vector2 MousePosition
+        public static Vector2 MousePosition
         {
             get { return mousePos; }
         }
 
-        public bool MouseClicked()
+        public static bool MouseClicked()
         {
             return prevMouseState.LeftButton == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released;
         }
 
-        public bool MousePressed()
+        public static bool MousePressed()
         {
             return mouseState.LeftButton == ButtonState.Pressed;
         }
         
-        public bool KeyTapped(Keys key)
+        public static bool KeyTapped(Keys key)
         {
             return prevKeyboardState.IsKeyDown(key) && keyboardState.IsKeyUp(key);
         }
 
-        public bool KeyPressed(Keys key)
+        public static bool KeyPressed(Keys key)
         {
             return keyboardState.IsKeyDown(key);
         }

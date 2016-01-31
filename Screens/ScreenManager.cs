@@ -57,7 +57,7 @@ namespace MelSpaceHunter.Screens
 
         public void Update(GameTime gameTime)
         {
-            if (CurrentScreen.InputManager.KeyTapped(Keys.Escape))
+            if (InputManager.KeyTapped(Keys.Escape))
             {
                 PopScreen();
                 return;
