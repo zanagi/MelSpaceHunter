@@ -14,13 +14,14 @@ namespace MelSpaceHunter.Gameplay.Forms
     {
         protected Animation animation;
         protected Elements element;
-        protected int experience, maxExperience, elementalPoints, maxElementalPoints; 
+        protected int experience, maxExperience;
+        protected float elementalPoints, maxElementalPoints;
 
         public Form(string path, Elements element, int width, int height, int maxElementalPoints = 100)
         {
             this.animation = new Animation(path, 4, 1, width, height);
             this.element = element;
-            this.experience = 0;
+            this.experience = 50;
             this.maxExperience = 100;
             this.elementalPoints = 0;
             this.maxElementalPoints = maxElementalPoints;
@@ -31,8 +32,10 @@ namespace MelSpaceHunter.Gameplay.Forms
             animation.LoadContent(content);
         }
 
-        public virtual void Update(GameTime gameTime, List<Elemental> elementals)
+        public virtual void Update(GameTime gameTime, List<Elemental> elementals, int attack, int defense, int stamina)
         {
+            elementalPoints = Math.Max(0, elementalPoints - Math.Max(0.01f, 10.0f / stamina - stamina / 30.0f));
+
             animation.Update(gameTime);
         }
 
@@ -85,7 +88,7 @@ namespace MelSpaceHunter.Gameplay.Forms
             get { return 1.0f; }
         }
 
-        public virtual float EnergyConsumptionModifier
+        public virtual float StaminaModifier
         {
             get { return 1.0f; }
         }
@@ -97,13 +100,13 @@ namespace MelSpaceHunter.Gameplay.Forms
 
         public float ExperienceRatio
         {
-            get { return Math.Min(1.0f, 1.0f * experience / maxExperience); }
+            get { return Math.Min(1.0f, (1.0f * experience) / maxExperience); }
         }
 
         
         public float ElementalRatio
         {
-            get { return Math.Min(1.0f, 1.0f * elementalPoints / maxElementalPoints); }
+            get { return Math.Min(1.0f, elementalPoints / maxElementalPoints); }
         }
         #endregion
     }

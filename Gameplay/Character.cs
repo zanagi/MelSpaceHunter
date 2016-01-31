@@ -22,10 +22,9 @@ namespace MelSpaceHunter.Gameplay
         private EarthForm earthForm;
         private WaterForm waterForm;
         private WindForm windForm;
-        private double formPoints, maxFormPoints;
 
         // Character Stats
-        private int attack, defense, energyConsumption, speed, maxStatValue;
+        private int attack, defense, stamina, speed, maxStatValue;
         private int currentHealth, maxHealth, maxHealthLimit;
 
         private bool animating;
@@ -37,7 +36,7 @@ namespace MelSpaceHunter.Gameplay
             int startingElementPoints = 0, int maxElementPoints = 100)
         {
             this.pos = pos;
-            this.attack = this.defense = this.energyConsumption = this.speed = startingStatValue;
+            this.attack = this.defense = this.stamina = this.speed = startingStatValue;
             this.maxStatValue = maxStatValue;
             this.currentHealth = maxHealth = startingMaxHealth;
             this.maxHealthLimit = maxHealthLimit;
@@ -47,8 +46,6 @@ namespace MelSpaceHunter.Gameplay
             this.earthForm = new EarthForm("Forms/earthForm", width, height);
             this.waterForm = new WaterForm("Forms/waterForm", width, height);
             this.windForm = new WindForm("Forms/windForm", width, height);
-            this.formPoints = 0.0;
-            this.maxFormPoints = 100.0;
             this.form = normalForm;
         }
 
@@ -66,7 +63,7 @@ namespace MelSpaceHunter.Gameplay
             UpdateStats();
 
             HandleInput(inputManager);
-            form.Update(gameTime, elementals);
+            form.Update(gameTime, elementals, TotalAttack, TotalDefence, TotalStamina);
         }
 
         private void UpdateStats()
@@ -97,41 +94,66 @@ namespace MelSpaceHunter.Gameplay
             // Transformation
             if (!Transformed)
             {
-                if (inputManager.KeyTapped(Keys.W) && fireForm.CanTransform())
-                {
-                    ChangeForm(fireForm);
-                }
-                else if (inputManager.KeyTapped(Keys.D) && waterForm.CanTransform())
-                {
-                    ChangeForm(waterForm);
-                }
-                else if (inputManager.KeyTapped(Keys.S) && earthForm.CanTransform())
-                {
-                    ChangeForm(earthForm);
-                }
-                else if (inputManager.KeyTapped(Keys.A) && windForm.CanTransform())
-                {
-                    ChangeForm(windForm);
-                }
+                HandleTransformationInput(inputManager);
             }
             else
             {
-                // TODO: Transformation Special Moves
-                if (inputManager.KeyTapped(Keys.Q))
-                {
+                HandleFormInput(inputManager);
+            }
+        }
 
-                }
-                else if (inputManager.KeyTapped(Keys.E))
-                {
+        private void HandleTransformationInput(InputManager inputManager)
+        {
+            if (inputManager.KeyTapped(Keys.W) && fireForm.CanTransform())
+            {
+                ChangeForm(fireForm);
+            }
+            else if (inputManager.KeyTapped(Keys.D) && waterForm.CanTransform())
+            {
+                ChangeForm(waterForm);
+            }
+            else if (inputManager.KeyTapped(Keys.S) && earthForm.CanTransform())
+            {
+                ChangeForm(earthForm);
+            }
+            else if (inputManager.KeyTapped(Keys.A) && windForm.CanTransform())
+            {
+                ChangeForm(windForm);
+            }
+        }
 
-                }
+        private void HandleFormInput(InputManager inputManager)
+        {
+            // TODO: Transformation Special Moves
+            if (inputManager.KeyTapped(Keys.Q))
+            {
+
+            }
+            else if (inputManager.KeyTapped(Keys.E))
+            {
+
+            }
+            else if (inputManager.KeyTapped(Keys.W) && form.Equals(fireForm))
+            {
+                ChangeForm(normalForm);
+            }
+            else if (inputManager.KeyTapped(Keys.D) && form.Equals(waterForm))
+            {
+                ChangeForm(normalForm);
+            }
+            else if (inputManager.KeyTapped(Keys.S) && form.Equals(earthForm))
+            {
+                ChangeForm(normalForm);
+            }
+            else if (inputManager.KeyTapped(Keys.A) && form.Equals(windForm))
+            {
+                ChangeForm(normalForm);
             }
         }
 
         private void ChangeForm(Form newForm)
         {
             form = newForm;
-            formPoints = maxFormPoints;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -158,7 +180,7 @@ namespace MelSpaceHunter.Gameplay
                     defense = Math.Max(defense + amount, maxStatValue);
                     break;
                 case Elements.Water:
-                    energyConsumption = Math.Max(energyConsumption + amount, maxStatValue);
+                    stamina = Math.Max(stamina + amount, maxStatValue);
                     break;
                 case Elements.Wind:
                     speed = Math.Max(speed + amount, maxStatValue);
@@ -182,9 +204,9 @@ namespace MelSpaceHunter.Gameplay
             get { return (int)(defense * form.DefenseModifier); }
         }
 
-        public int TotalEnergyConsumption
+        public int TotalStamina
         {
-            get { return (int)(energyConsumption * form.EnergyConsumptionModifier); }
+            get { return (int)(stamina * form.StaminaModifier); }
         }
 
         public int TotalSpeed
@@ -194,7 +216,7 @@ namespace MelSpaceHunter.Gameplay
 
         public int StatAverage
         {
-            get { return (attack + defense + energyConsumption + speed) / 4;}
+            get { return (attack + defense + stamina + speed) / 4;}
         }
 
         public float FireRatio

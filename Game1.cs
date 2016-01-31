@@ -39,9 +39,9 @@ namespace MelSpaceHunter
         protected override void Initialize()
         {
             IsMouseVisible = true;
-            graphics.PreferredBackBufferWidth = 1366;
-            graphics.PreferredBackBufferHeight = 768;
-            // graphics.IsFullScreen = true;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
             // Resulution calc
@@ -81,10 +81,10 @@ namespace MelSpaceHunter
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed /* || Keyboard.GetState().IsKeyDown(Keys.Escape)*/)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || !screenManager.HasScreen /* || Keyboard.GetState().IsKeyDown(Keys.Escape)*/)
                 Exit();
 
-            if (!viewportUpdated)
+            if (!viewportUpdated || !this.IsActive)
                 return;
 
             screenManager.Update(gameTime);

@@ -21,7 +21,7 @@ namespace MelSpaceHunter.Gameplay.Forms
 
         }
 
-        public override float EnergyConsumptionModifier
+        public override float StaminaModifier
         {
             get
             {
