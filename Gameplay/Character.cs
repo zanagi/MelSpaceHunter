@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MelSpaceHunter.Gameplay.Forms;
 using MelSpaceHunter.Gameplay.Elementals;
+using MelSpaceHunter.Effects;
 
 namespace MelSpaceHunter.Gameplay
 {
@@ -28,7 +29,7 @@ namespace MelSpaceHunter.Gameplay
         private int currentHealth, maxHealth, maxHealthLimit;
 
         // Damage
-        private int damageTimeElapsed, damageStacked;
+        private int damageTimeElapsed, damageStacked, damageDigitWidth, damageDigitHeight;
         private const int damageInterval = 300;
 
         private bool animating;
@@ -54,6 +55,8 @@ namespace MelSpaceHunter.Gameplay
 
             this.damageTimeElapsed = damageInterval;
             this.damageStacked = 0;
+            this.damageDigitWidth = width / 4;
+            this.damageDigitHeight = this.damageDigitWidth * 3 / 2;
         }
 
         public void LoadContent(ContentManager content)
@@ -183,6 +186,10 @@ namespace MelSpaceHunter.Gameplay
             if (CanBeDamaged)
             {
                 currentHealth = Math.Max(0, currentHealth - damageStacked);
+
+                EffectManager.AddEffect(new NumberEffect(damageStacked, 700, damageDigitWidth, damageDigitHeight, 
+                    new Vector2(pos.X - damageDigitWidth / 2, pos.Y - damageDigitHeight), -Vector2.UnitY, Color.Red));
+
                 damageStacked = damageTimeElapsed = 0;
             }
         }
@@ -201,12 +208,10 @@ namespace MelSpaceHunter.Gameplay
             form.AddExperience(amount);
         }
 
-        public void AddElementalPoints(Elements element)
+        public void AddElementalPoints(Elements element, int amount)
         {
             if (form.Equals(normalForm))
             {
-                int amount = Math.Max(5, 30 / StatAverage);
-
                 //Console.WriteLine("elem: " + amount);
 
                 switch (element)

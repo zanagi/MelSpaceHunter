@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using MelSpaceHunter.Screens;
+using MelSpaceHunter.Effects;
 #endregion
 
 namespace MelSpaceHunter
@@ -41,7 +42,7 @@ namespace MelSpaceHunter
             IsMouseVisible = true;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            graphics.IsFullScreen = true;
+            // graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
             // Resulution calc
@@ -61,6 +62,11 @@ namespace MelSpaceHunter
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // Initialize static classes
+            Texture2D numberSheet = Content.Load<Texture2D>("numbers");
+            NumberDrawer.Initialize(numberSheet);
+            EffectManager.Initialize();
 
             screenManager = new ScreenManager(Content, new ViewManager(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight));
         }

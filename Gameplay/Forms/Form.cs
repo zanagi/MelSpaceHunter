@@ -56,7 +56,7 @@ namespace MelSpaceHunter.Gameplay.Forms
                     elementals[i].TakeDamage(
                         (int)(Math.Max(1, (character.TotalAttack + 5) * (character.TotalAttack + 5) / (5 * elementals[i].Defense)) 
                         * Element.GetMultiplier(character.CurrentElement, elementals[i].CurrentElement)));
-                    character.StackDamage((int)(Math.Max(1, (elementals[i].Attack + 3) * (elementals[i].Attack + 3) / (5 * character.TotalDefense))
+                    character.StackDamage((int)(Math.Max(1, (elementals[i].Attack + 4) * (elementals[i].Attack + 4) / (4 * character.TotalDefense))
                         * Element.GetMultiplier(elementals[i].CurrentElement, character.CurrentElement)));
                 }
             }
@@ -100,7 +100,7 @@ namespace MelSpaceHunter.Gameplay.Forms
 
             //Console.WriteLine("Elemental points yeahs");
 
-            elementalPoints = Math.Max(elementalPoints + amount, maxElementalPoints);
+            elementalPoints = Math.Min(elementalPoints + amount, maxElementalPoints);
         }
 
         public void AddExperience(int targetExperienceAmount)

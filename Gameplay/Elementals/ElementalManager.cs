@@ -75,7 +75,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
                 else if (!elementals[i].IsAlive)
                 {
                     character.AddExperience(elementals[i].PointYield);
-                    character.AddElementalPoints(elementals[i].CurrentElement);
+                    character.AddElementalPoints(elementals[i].CurrentElement, elementals[i].PointYield * 2);
                     elementals.RemoveAt(i);
                 }
                 else

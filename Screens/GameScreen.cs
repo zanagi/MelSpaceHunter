@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MelSpaceHunter.Gameplay;
 using MelSpaceHunter.Gameplay.Elementals;
+using MelSpaceHunter.Effects;
 
 namespace MelSpaceHunter.Screens
 {
@@ -68,6 +69,8 @@ namespace MelSpaceHunter.Screens
             character.Update(gameTime, inputManager, elementalManager.GetElementals());
             elementalManager.Update(gameTime, character, manager.ViewManager);
             camera.MoveTo((int)character.Position.X, (int)character.Position.Y);
+
+            EffectManager.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -84,6 +87,9 @@ namespace MelSpaceHunter.Screens
             character.Draw(spriteBatch);
             elementalManager.Draw(spriteBatch);
 
+            // Draw effects
+            EffectManager.Draw(spriteBatch);
+
             if (inHelpScreen)
             {
                 // TODO: 
@@ -92,8 +98,11 @@ namespace MelSpaceHunter.Screens
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+
+            // Draw radar & info zone
             DrawRadar(spriteBatch);
             infoArea.Draw(spriteBatch, character);
+
             spriteBatch.End();
         }
 

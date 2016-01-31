@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MelSpaceHunter.Effects;
 
 namespace MelSpaceHunter.Gameplay.Elementals
 {
@@ -160,6 +161,10 @@ namespace MelSpaceHunter.Gameplay.Elementals
             {
                 health = Math.Max(0, health - amount);
                 damageTimeElapsed = 0;
+
+
+                EffectManager.AddEffect(new NumberEffect(amount, 700, width / 2, width * 3 / 4,
+                    new Vector2(pos.X - width / 2, pos.Y - width * 3 / 4), -Vector2.UnitY, Color.LightBlue));
             }
         }
 
