@@ -74,6 +74,12 @@ namespace MelSpaceHunter
             spriteBatch.Draw(texture, GetDestinationRectangle(origin), GetSourceRectangle(), color);
         }
 
+        public virtual void DrawFrame(SpriteBatch spriteBatch, int originX, int originY, int width, int height, int frame)
+        {
+            Rectangle dest = new Rectangle(originX - width / 2, originY - height / 2, width, height);
+            spriteBatch.Draw(texture, dest, GetSourceRectangle(frame), Color.White);
+        }
+
         private Rectangle GetDestinationRectangle(Vector2 origin)
         {
             return new Rectangle((int)origin.X - frameWidth / 2, (int)origin.Y - frameHeight / 2, frameWidth, frameHeight);
@@ -82,6 +88,12 @@ namespace MelSpaceHunter
         private Rectangle GetSourceRectangle()
         {
             return new Rectangle(currentFrame % frameColumns * sourceFrameWidth, currentFrame / frameColumns * sourceFrameHeight,
+                sourceFrameWidth, sourceFrameHeight);
+        }
+
+        private Rectangle GetSourceRectangle(int frame)
+        {
+            return new Rectangle(frame % frameColumns * sourceFrameWidth, frame / frameColumns * sourceFrameHeight,
                 sourceFrameWidth, sourceFrameHeight);
         }
 
