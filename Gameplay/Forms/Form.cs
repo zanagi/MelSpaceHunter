@@ -39,14 +39,28 @@ namespace MelSpaceHunter.Gameplay.Forms
                 experience += Math.Min(3, targetExperience - experience);
             }
 
-            elementalPoints = Math.Max(0, elementalPoints - Math.Max(0.01f, 10.0f / character.TotalStamina - character.TotalStamina / 30.0f));
+            elementalPoints = Math.Max(0, elementalPoints - Math.Max(0.05f, 1.0f / character.TotalStamina));
 
             animation.Update(gameTime);
+
+            HandleCombat(elementals, character);
         }
 
-        private void HandleCombat(List<Elemental> elementals, int attack, Character character)
+        private void HandleCombat(List<Elemental> elementals, Character character)
         {
-
+            for (int i = 0; i < elementals.Count; i++)
+            {
+                if (Vector2.DistanceSquared(elementals[i].Position, character.Position) 
+                    <= Math.Pow((elementals[i].Width + animation.TargetWidth) / 2, 2))
+                {
+                    elementals[i].TakeDamage(
+                        (int)(Math.Max(1, (character.TotalAttack + 5) * (character.TotalAttack + 5) / (5 * elementals[i].Defense)) 
+                        * Element.GetMultiplier(character.CurrentElement, elementals[i].CurrentElement)));
+                    character.StackDamage((int)(Math.Max(1, (elementals[i].Attack + 3) * (elementals[i].Attack + 3) / (5 * character.TotalDefense))
+                        * Element.GetMultiplier(elementals[i].CurrentElement, character.CurrentElement)));
+                }
+            }
+            character.TakeDamage();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 origin)
@@ -65,7 +79,8 @@ namespace MelSpaceHunter.Gameplay.Forms
 
             if (increase > 0)
             {
-                experience -= increase * maxExperience;
+                targetExperience = experience % maxExperience;
+                experience = 0;
 
                 // Increase max experience cap
                 maxExperience = maxExperience * 115 / 100;
@@ -83,6 +98,8 @@ namespace MelSpaceHunter.Gameplay.Forms
             if (amount < 0)
                 throw new Exception("Negative increase in elemental points");
 
+            //Console.WriteLine("Elemental points yeahs");
+
             elementalPoints = Math.Max(elementalPoints + amount, maxElementalPoints);
         }
 
@@ -93,11 +110,11 @@ namespace MelSpaceHunter.Gameplay.Forms
 
         public bool CanTransform()
         {
-            return elementalPoints == maxElementalPoints;
+            return elementalPoints >= maxElementalPoints;
         }
 
         #region properties
-        public Elements Element
+        public Elements CurrentElement
         {
             get { return element; }
         }

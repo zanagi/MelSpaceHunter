@@ -69,8 +69,13 @@ namespace MelSpaceHunter.Gameplay.Elementals
                 // Using relativeX for both check for a circle image zone
                 if (Vector2.DistanceSquared(character.Position, elementals[i].Position) > Math.Pow(viewManager.RelativeX(relativeRemovalRadius), 2))
                 {
-                    // Elemental too far to care anymore, remove it
-                    Console.WriteLine("Elemental removed");
+                    // Console.WriteLine("Elemental removed");
+                    elementals.RemoveAt(i);
+                }
+                else if (!elementals[i].IsAlive)
+                {
+                    character.AddExperience(elementals[i].PointYield);
+                    character.AddElementalPoints(elementals[i].CurrentElement);
                     elementals.RemoveAt(i);
                 }
                 else
@@ -89,7 +94,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
 
             if (newZoneNeeded)
             {
-                Console.WriteLine("New zone needed");
+                // Console.WriteLine("New zone needed");
                 if (elementalZones.Count == 0)
                 {
                     // Create a zone with the character at the radius
@@ -115,7 +120,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
                 if (elementalZones[i].GeneratedAll || Vector2.DistanceSquared(character.Position, elementalZones[i].Position)
                     > viewManager.RelativeX(relativeRemovalRadius) * viewManager.RelativeX(relativeRemovalRadius))
                 {
-                    Console.WriteLine("Zone removed");
+                    // Console.WriteLine("Zone removed");
                     elementalZones.RemoveAt(i);
                 }
                 else
@@ -132,7 +137,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
                             
                             if(optionElemental != null) elementals.Add(optionElemental);
 
-                            Console.WriteLine("Elemental created at: " + elementals[elementals.Count - 1].Position);
+                            // Console.WriteLine("Elemental created at: " + elementals[elementals.Count - 1].Position);
                         }
                     }
                 }
@@ -203,7 +208,7 @@ namespace MelSpaceHunter.Gameplay.Elementals
             };
 
             // Stat calculation
-            Console.WriteLine("Zone added");
+            // Console.WriteLine("Zone added");
 
             elementalZones.Add(new ElementalZone(center, zoneRadius, baseMaxZoneElementals + characterStatAverage / 6,
                 1500 - 200 * characterStatAverage / 6, baseElementals));

@@ -22,6 +22,19 @@ namespace MelSpaceHunter.Gameplay
             return (int)target - (int)current == 1 || ((int)current == 4 && (int)target == 1);
         }
 
+        public static float GetMultiplier(Elements current, Elements target)
+        {
+            if (WeakAgainst(current, target))
+            {
+                return 0.5f;
+            }
+            else if (WeakAgainst(target, current))
+            {
+                return 2.0f;
+            }
+            return 1.0f;
+        }
+
         public static Color GetColor(Elements element)
         {
             switch (element)

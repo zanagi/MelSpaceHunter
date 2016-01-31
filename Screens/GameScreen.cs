@@ -26,7 +26,7 @@ namespace MelSpaceHunter.Screens
         public GameScreen(ScreenManager manager)
             : base(manager)
         {
-            this.backgroundManager = new BackgroundManager("background", manager.ViewManager.Width, manager.ViewManager.Height);
+            this.backgroundManager = new BackgroundManager("grassBg", manager.ViewManager.Width, manager.ViewManager.Height);
 
             int characterBaseWh = manager.ViewManager.RelativeY(10);
             this.character = new Character(new Vector2(camera.X, camera.Y), characterBaseWh, characterBaseWh);

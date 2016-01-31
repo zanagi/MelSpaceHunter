@@ -20,6 +20,10 @@ namespace MelSpaceHunter.Gameplay.Elementals
         // Stats
         private int attack, defense, speed, health, maxHealth;
 
+        // Damage time
+        private int damageTimeElapsed;
+        private const int damageInterval = 300;
+
         public Elemental(Elements element, Movements movement, Vector2 pos, Vector2 velocity, Animation animation, Animation creationAnimation,
             int width, int height, int attack, int defense, int speed, int health)
         {
@@ -43,6 +47,8 @@ namespace MelSpaceHunter.Gameplay.Elementals
             this.defense = defense;
             this.speed = speed;
             this.health = this.maxHealth = health;
+
+            this.damageTimeElapsed = damageInterval;
         }
 
         public Elemental Clone(Movements newMovement, Vector2 newPosition, Vector2 newVelocity)
@@ -55,17 +61,16 @@ namespace MelSpaceHunter.Gameplay.Elementals
         {
             if (!created)
             {
-                // TODO: creation animation update
                 creationAnimation.Update(gameTime);
                 created = creationAnimation.LoopedOnce;
                 return;
             }
-
             animation.Update(gameTime);
 
             Move(characterPosition, elementals);
 
-            // TODO: Collision detection & handling
+            if(!CanBeDamaged)
+                damageTimeElapsed += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
         }
 
         private void Move(Vector2 characterPosition, List<Elemental> elementals)
@@ -146,6 +151,17 @@ namespace MelSpaceHunter.Gameplay.Elementals
             return Vector2.DistanceSquared(pos + delta, e.pos) <= Math.Pow((width + e.width) / 2, 2);
         }
 
+        public void TakeDamage(int amount)
+        {
+            if (amount <= 0)
+                return;
+
+            if (CanBeDamaged)
+            {
+                health = Math.Max(0, health - amount);
+                damageTimeElapsed = 0;
+            }
+        }
 
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -163,6 +179,16 @@ namespace MelSpaceHunter.Gameplay.Elementals
         }
 
         #region Properties
+        public bool CanBeDamaged
+        {
+            get { return damageTimeElapsed >= damageInterval; }
+        }
+
+        public bool IsAlive
+        {
+            get { return health > 0; }
+        }
+
         public Elements CurrentElement
         {
             get { return element; }
@@ -181,6 +207,16 @@ namespace MelSpaceHunter.Gameplay.Elementals
         public int PointYield
         {
             get { return attack + defense + speed; }
+        }
+
+        public int Attack
+        {
+            get { return attack; }
+        }
+
+        public int Defense
+        {
+            get { return defense; }
         }
 
         public Vector2 Position
